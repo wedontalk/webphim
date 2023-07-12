@@ -9,9 +9,9 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Mazer Admin Dashboard</title>
-
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -25,16 +25,17 @@
     <link rel="stylesheet" href="<?php echo e(asset('assets/vendors/bootstrap-icons/bootstrap-icons.css')); ?>">
     <link rel="stylesheet" href="<?php echo e(asset('assets/css/app.css')); ?>">
     <link rel="shortcut icon" href="<?php echo e(asset('assets/images/favicon.svg')); ?>" type="image/x-icon">
+
 </head>
 
-<body onload="ChangeToSlug();">
+<body>
     <div id="app">
         <div id="sidebar" class="active">
             <div class="sidebar-wrapper active">
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo">
-                            <a href="<?php echo e(route('home.index')); ?>"><img src="<?php echo e(asset('assets/images/logo/logo.png')); ?>" alt="Logo" srcset=""></a>
+                            <a href="<?php echo e(route('home.index')); ?>"><img src="<?php echo e(asset('wp-content/uploads/logo1-kenhanime.png')); ?>" alt="Logo" width="220px" style="height:50px"></a>
                         </div>
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
@@ -45,14 +46,17 @@
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
 
-                        <li class="sidebar-item active ">
-                            <a href="<?php echo e(route('admin.dashboard')); ?>" class='sidebar-link'>
+                        <li class="sidebar-item <?php echo e((Request::segment(2) == '') ? 'active':''); ?>">
+                            <a href="<?php echo e(route('admin.dashboard')); ?>" class="sidebar-link ">
                                 <i class="bi bi-grid-fill"></i>
                                 <span>Trang Chủ</span>
                             </a>
                         </li>
                         <?php $__currentLoopData = $menu; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $mn): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <li class="sidebar-item  has-sub">
+                        <?php
+                        $segment = $mn['segment'];
+                        ?>
+                        <li class="sidebar-item  has-sub <?php echo e((Request::segment(2) == $segment) ? 'active':''); ?>">
                             <a href="<?php echo e(route($mn['route'])); ?>" class='sidebar-link'>
                                 <i class="<?php echo e($mn['icon']); ?>"></i>
                                 <span><?php echo e($mn['label']); ?></span>
@@ -77,7 +81,6 @@
     </div>
     <script src="<?php echo e(asset('assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/bootstrap.bundle.min.js')); ?>"></script>
-    <?php echo $__env->yieldContent('js'); ?>
     <script src="<?php echo e(asset('assets/vendors/apexcharts/apexcharts.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/pages/dashboard.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/vendors/fontawesome/all.min.js')); ?>"></script>
@@ -89,88 +92,67 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <?php echo $__env->yieldContent('js'); ?>
 </body>
 <script>
-jQuery(document).ready(function($) {
-    chart7day();
-  var chart = new Morris.Bar({
-        element: 'myfirstchart',
-        // option thống kê
-        barColors: ['#435ebe', '#fc8710','#FF6541','#A4ADD3'],
-        gridTextColor:['#000000'],
-        // pointFillColors: ['#ffffff'],
-        // pointStrokeColors:['black'],
-        fillOpacity:0.8,
-        hideHover: 'auto',
-        parseTime: false,
-
-        xkey: 'name',
-        ykeys: ['view'],
-        // behaveLikeLine: true,
-
-        labels: ['lượt xem']
-    });
-
-// autoload 30 ngày đơn hàng
-    function chart7day(){
-    var _token = $('input[name="_token"]').val();
-    $.ajax({
-        url:'<?php echo e(url('/admin/order-date')); ?>',
-        method:"post",
-        dataType:"JSON",
-        data:{_token:_token},
-
-        success:function(data)
-        {
-            chart.setData(data);
+    $( ".sortable_slider" ).sortable({
+        placeholder: 'ui-state-highlight',
+        update: function(event,ui){
+            var array_id = [];
+            var _token = $('meta[name="csrf-token"]').attr('content');
+            $('.sortable_slider tr').each(function(){
+                array_id.push($(this).attr('id'));
+            })
+            // alert(array_id);
+            // alert(_token);
+            $.ajax({
+                url:"<?php echo e(route('sortslider')); ?>",
+                method:"POST",
+                data:{array_id:array_id,_token:_token},
+                success: function(data){
+                    if(data = 'sapxepthanhcong'){
+                        alertify.success('sắp xếp thành công');
+                    }
+                }
+            })
         }
     });
-}
-// lọc theo select
-$('.dashboard-filter').change(function(){
-        var dashboard_value = $(this).val();
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url:'<?php echo e(url('/admin/dashboard-filter')); ?>',
-            method:"post",
-            dataType:"JSON",
-            data:{dashboard_value:dashboard_value , _token:_token},
-            success:function(data)
-            {
-                chart.setData(data);
-            }
-        });
+</script>
+<script>
+    function delay(callback, ms) {
+        var timer = 0;
+        return function() {
+            var context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+            callback.apply(context, args);
+            }, ms || 0);
+        };
+    }
+
+    $(document).ready(function(){
+        $('#search').keyup(delay(function (e){
+        $('#hidden-ajax').html('');
+        var search = $('#search').val();
+        // alert(search);
+        if(search != ''){
+            var expression = new RegExp(search, "i");
+            $.getJSON('./json_file/movies.json', function(data){
+                $.each(data, function(key, value){
+                    if(search.length > 1){
+                    if(value.name.search(expression) != -1 || value.name2.search(expression) != -1){
+                        $('#hidden-ajax').removeClass('hidden')
+                        $('#hidden-ajax').append('<tr><td class="text-bold-500">'+value.name+'</td><td class="text-bold-500">'+value.name2+'</td><td>'+value.slug+'</td><td><img src="/uploads/'+value.image+'" alt="'+value.name+' width="100px" height="100px""></td><td><div class="btn-group mb-1"><div class="dropdown"><button class="btn btn-secondary dropdown-toggle me-1" type="button" id="dropdownMenuButtonSec" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hành Động</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButtonSec" style="margin: 0px;"><a class="dropdown-item" href="admintrator/phim/'+value.id+'">Chi Tiết</a><a class="dropdown-item" href="admintrator/phim/'+value.id+'/edit">Sửa Phim</a></div></div></div></td></tr>')
+                    }
+                    }
+                })
+            })
+        }else{
+            $('#hidden-ajax').addClass('hidden')
+        }
+        
+        },500))
     });
-
-// onclick lọc theo ngày tháng
-    $('#btn-dashboard-filter').on('click',function(){
-            var from_date = $('#datepicker').val();
-            var to_date = $('#datepicker2').val();
-            var _token = $('input[name="_token"]').val();
-            $.ajax({
-                url:'<?php echo e(url('/admin/filter-by-date')); ?>',
-                method:"post",
-                dataType:"JSON",
-                data:{from_date:from_date ,to_date:to_date, _token:_token },
-
-                success:function(data)
-                {
-                    chart.setData(data);
-                }
-            });
-        });
-
-});
-
 </script>
-<script>
-  $( function() {
-    $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
-  } );
-</script>
-<script>
-  $( function() {
-    $( "#datepicker2" ).datepicker({ dateFormat: 'yy-mm-dd' });
-  } );
-  </script>
+
 </html><?php /**PATH C:\xampp\htdocs\webphim\resources\views/layouts/admin.blade.php ENDPATH**/ ?>

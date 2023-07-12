@@ -32,6 +32,73 @@
       height:60px;
     }
   </style>
+  <style>
+    #thongtin{
+        background-color: #f0f8ff;
+    }
+    #thongtin p{
+        font-weight: bold;
+        color: #000;
+    }
+    .box-tutien{
+        border: 1px solid #fff;
+        border-radius: 5px;
+        width: 100%;
+        /* padding: 15px 20px; */
+    }
+    .box-tutien .progress{
+
+    }
+    .box-tutien .level{
+        font-size: 14px;
+        color: #db7b17;
+    }
+    .box-tutien .level-next{
+        float: right;
+    }
+    .group-info{
+        width: 100%;
+        float: left;
+        margin: 5px 0px;
+    }
+    .group-info .label{
+        width: 30%;
+        float: left;
+    }
+    .group-info .detail{
+        width: 70%;
+        float: left;
+    }
+    .box-thongbao{
+        background:rgb(194, 193, 193);
+        border: 1px solid;
+        border-radius: 5px;
+        color: #000 !important;
+        padding: 10px 10px;
+    }
+    .list-group{
+        list-style: none;
+        width: 100%;
+        background:#f0f8ff;
+        padding: 15px 20px;
+    }
+    .list-group li{
+        padding: 5px 0px;
+        border-bottom:1px dashed;
+    }
+    .list-group li a{
+        color: #000;
+        font-size: 15px;
+    }
+    .list-group li:hover a{
+        color: #b7b7b7;
+        transition: 0.2s;
+    }
+    .active{
+        font-weight: bold;
+        color: #196191 !important;
+    }
+  </style>
 </head>
 <body data-rsssl=1 class="home blog halimthemes halimmovies halim-corner-rounded" data-masonry="">
 <header id="header"><div class="container">
@@ -137,65 +204,93 @@
 <div class="container">
   <div class="row">
     <div class="col-12" style="text-align: center"></div>
-    <?php echo $__env->make('user.slide', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-    <!-- banner header -->
-    <div class="col-12" style="display:flex; justify-content:center">
-      <a href="">
-        <img src="<?php echo e(asset('wp-content/uploads/banner-720.png')); ?>" alt="">
-      </a>
+    <div class="container">
+        <div class="row container">
+            <div class="row col-lg-4 col-12 border-right">
+                <div class="col-md-12">
+                    <div id="thongtin" class="d-flex flex-column align-items-center text-center p-3 py-5">
+                        <?php if(Auth::user()->profile_photo_path): ?>
+                        <img class="rounded-circle mt-5" width="150px" src="<?php echo e(asset(uploads/profile)); ?>/<?php echo e(Auth::user()->profile_photo_path); ?>">
+                        <?php else: ?>
+                        <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                        <?php endif; ?>
+                        <p class="text-black-50"><?php echo e(Auth::user()->email); ?></p>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <ul class="list-group">
+                        <li class="list-group-item"><a href="" class="active">Thông Tin chung</a></li>
+                        <li class="list-group-item"><a href="<?php echo e(route('animedaluu')); ?>">Anime đã lưu</a></li>
+                        <li class="list-group-item"><a href="">Lịch sử xem anime</a></li>
+                        <li class="list-group-item"><a href="">Đổi Thông tin</a></li>
+                        <li class="list-group-item"><a href="">Đổi mật khẩu</a></li>
+                        <li class="list-group-item"><a href="">Đăng xuất</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-8 col-12">
+                <div class="col-md-12 col-12 box-tutien">
+                    <h4><center>- Thông tin chung -</center></h4>
+                    <p>Trạng thái tu tiên</p>
+                    <span class="level level-current">Luyện khí</span>
+                    <span class="level level-next">Tụ đan</span>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="group-info">
+                        <div class="label">
+                            Họ và Tên :
+                        </div>
+                        <div class="detail"><?php echo e(Auth::user()->name); ?></div>
+                    </div>
+                    <div class="group-info">
+                        <div class="label">
+                            Email :
+                        </div>
+                        <div class="detail"><?php echo e(Auth::user()->email); ?></div>
+                    </div>
+                    <div class="group-info">
+                        <div class="label">
+                            Loại Hệ Thống :
+                        </div>
+                        <div class="detail">Tu tiên</div>
+                    </div>
+                </div>
+                <div class="col-md-12 mt-3">
+                <h4><center>- Thông báo Từ Admin -</center></h4>
+                </div>
+                <div class="col-md-12 col-12 mt-3 box-thongbao">
+                    <div class="col-12">
+                        <?php $__currentLoopData = $thongbao; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tb): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                          <?php echo $tb->text_thongbao; ?>
+
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- end banner header -->
-    <?php echo $__env->yieldContent('main'); ?>
+
   <div class="clearfix"></div>
-  <!-- banner footer -->
-  <div class="col-12" style="display:flex; justify-content:center">
-    <a href="">
-      <img src="<?php echo e(asset('wp-content/uploads/banner-720.png')); ?>" alt="">
-    </a>
-  </div>
-  <!-- end banner footer -->
-  <footer id="footer" class="clearfix">
+<footer id="footer" class="clearfix">
     <div class="container footer-columns">
-      <div class="row container">
-        <div class="widget about col-xs-12 col-sm-4 col-md-4">
-          <div class="footer-logo">
-            <img class="img-responsive" src="<?php foreach($showcauhinh as $key => $avatar) {echo'../../uploads/logo/'.$avatar->logo_footer;} ?>" alt="AnimeHot.XYZ" width="420px" height="200px"/>
-            <span class="social"></span>
-          </div>
-          <p class="halim-about">
-            <p style="text-align: left;"><?php foreach($showcauhinh as $key => $avatar) {
-              echo $avatar->thongtin;
-            } ?></p>
-            <!-- <p style="text-align: left;">Liên hệ: animehot.xyz@gmail.com</p> -->
-          </p>
+    <div class="row container">
+    <div class="widget about col-xs-12 col-sm-4 col-md-4">
+        <div class="footer-logo">
+        <img class="img-responsive" src="<?php foreach($showcauhinh as $key => $avatar) {echo'../../uploads/logo/'.$avatar->logo_header;} ?>" alt="AnimeHot.XYZ" width="420px" height="200px"/>
+        <span class="social"></span>
         </div>
-        <div class="col-xs-12 col-sm-8 col-md-8">
-        <div class="fb-page" data-href="https://www.facebook.com/animetvh.net/" data-tabs="timeline" data-width="500" data-height="320" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/animetvh.net/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/animetvh.net/">animetvh.net</a></blockquote></div>        </div>
-      </div>
-    </footer>
-    <!-- modal -->
-    <div class="modal fade" id="banner_qc" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <!-- <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5> -->
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <a href="http://127.0.0.1:8000/chi-tiet-anime/akuyaku-reijou-nanode-last-boss-wo-kattemimashita.html">
-          <div class="modal-body">
-              <img src="http://127.0.0.1:8000/uploads/1664036620-phim.jpg" alt="">
-          </div>
-          </a>
-          <!-- <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div> -->
-        </div>
-      </div>
+        <p class="halim-about">
+        <p style="text-align: left;"><?php foreach($showcauhinh as $key => $avatar) {
+            echo $avatar->thongtin;
+        } ?></p>
+        <!-- <p style="text-align: left;">Liên hệ: animehot.xyz@gmail.com</p> -->
+        </p>
     </div>
-    <!-- end modal -->
+    <div class="col-xs-12 col-sm-8 col-md-8">
+    <div class="fb-page" data-href="https://www.facebook.com/animetvh.net/" data-tabs="timeline" data-width="500" data-height="320" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/animetvh.net/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/animetvh.net/">animetvh.net</a></blockquote></div>        </div>
+    </div>
+</footer>
     <div class="footer-credit">
       <div class="container credit">
         <div class="row container">
@@ -216,21 +311,6 @@
     </script>  -->
     <script type='text/javascript' src="<?php echo e(asset('wp-content/themes/halimmovies/assets/js/halimmovie.core.min5152.js?ver=1.0')); ?>"></script>
     <?php echo $__env->yieldContent('js'); ?>
-    <script>
-      // returnauto();
-      // function returnauto(){
-      //   $.ajax({
-      //       url:'<?php echo e(route("returnauto")); ?>',
-      //       method:"post",
-      //       dataType:"JSON",
-      //       data:{_token:'<?php echo e(csrf_token()); ?>'},
-      //       success:function(data)
-      //       {
-      //           //
-      //       }
-      //   });
-      // }
-    </script>
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v14.0&appId=3308862736097075&autoLogAppEvents=1" nonce="TCYniELl"></script>
       <!-- cdnjs -->
@@ -258,15 +338,14 @@
             $('.ajax-results').html('');
             var search = $('#search').val();
             // alert(search);
+
             if(search != ''){
               var expression = new RegExp(search, "i");
               $.getJSON('/json_file/movies.json', function(data){
                 $.each(data, function(key, value){
-                  if(search.length > 1){
-                    if(value.name.search(expression) != -1 || value.name2.search(expression) != -1){
-                      $('.ajax-results').removeClass('hidden')
-                      $('.ajax-results').append('<li class="exact_result"><a href="/chi-tiet-anime/'+value.slug+'"><div class="halim_list_item"><div class="image"><img src="/uploads/'+value.image+'" alt="'+value.name+'"></div><span class="label">'+value.name+'</span><span class="enName">'+value.name2.substring(0, 65)+'...</span></div></a></li>')
-                    }
+                  if(value.name.search(expression) != -1 || value.name2.search(expression) != -1){
+                    $('.ajax-results').removeClass('hidden')
+                    $('.ajax-results').append('<li class="exact_result"><a href="/chi-tiet-anime/'+value.slug+'"><div class="halim_list_item"><div class="image"><img src="/uploads/'+value.image+'" alt="'+value.name+'"></div><span class="label">'+value.name+'</span><span class="enName">'+value.name2.substring(0, 65)+'...</span></div></a></li>')
                   }
                 })
               })
@@ -274,60 +353,8 @@
               $('.ajax-results').addClass('hidden')
             }
             
-          },500))
+          },1000))
         });
       </script>
-      <script>
-            $(document).ready(function(){
-                $(window).on('load', function () {
-                    $('#banner_qc').modal('show');
-                });
-            });
-      </script>
-      <!-- <script>
-        $(document).keydown(function (event) {
-            if (event.keyCode == 123) { // Prevent F12
-                return false;
-            } else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) { 
-              // Prevent Ctrl+Shift+I        
-                return false;
-            }
-        });
-        $(document).on("contextmenu", function (e) {        
-            e.preventDefault();
-        });
-        setInterval(function () {
-            var before = new Date().getTime();
-            debugger;
-            var after = new Date().getTime();
-            if (after - before > 200) {
-                document.querySelector("html").innerHTML = "";
-                window.location.reload(true);
-            }
-        }, 100);
-      </script>
-      <script>
-        document.onkeydown = function(e) {
-                if (e.ctrlKey && 
-                    (e.keyCode === 67 || 
-                    e.keyCode === 86 || 
-                    e.keyCode === 85 || 
-                    e.keyCode === 117)) {
-                    return false;
-                } else {
-                    return true;
-                }
-        };
-        $(document).keypress("u",function(e) {
-          if(e.ctrlKey)
-          {
-        return false;
-        }
-        else
-        {
-        return true;
-        }
-        });
-      </script> -->
 </body>
-</html><?php /**PATH C:\xampp\htdocs\webphim\resources\views/layouts/user.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\xampp\htdocs\webphim\resources\views/user/thongtincanhan.blade.php ENDPATH**/ ?>

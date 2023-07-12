@@ -12,6 +12,7 @@ use App\Models\tapphim;
 use App\Models\baoloi;
 use Carbon\Carbon;
 use App\Models\metaall;
+use App\Models\traffic;
 use App\Models\server;
 use App\Models\thongbao;
 use DB;
@@ -25,10 +26,19 @@ class HomeController extends Controller
      *
      * @return void
      */
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    public function __construct(Request $request)
+    {
+        $user_request_ip = $request->ip();
+        $check_traffic = traffic::where('ip_address', $user_request_ip)->get();
+        // dd($check_traffic);
+        $traffic_count = $check_traffic->count();
+        if($traffic_count < 1){
+            $traffic = new traffic();
+            $traffic->ip_address = $user_request_ip;
+            $traffic->date_traffic = Carbon::now('Asia/Ho_Chi_Minh')->toDateString();
+            $traffic->save();
+        }
+    }
 
     /**
      * Show the application dashboard.

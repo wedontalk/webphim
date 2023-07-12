@@ -1,8 +1,8 @@
-@extends('layouts.admin')
-@section('js')
+
+<?php $__env->startSection('js'); ?>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-@endsection
-@section('main')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('main'); ?>
 <div id="main">
             <header class="mb-3">
                 <a href="#" class="burger-btn d-block d-xl-none">
@@ -123,20 +123,20 @@
                                     <div class="avatar avatar-xl">
                                         <img src="assets/images/faces/1.jpg" alt="Face 1">
                                     </div>
-                                    @if(Route::has('login'))
+                                    <?php if(Route::has('login')): ?>
                                     <div class="ms-3 name">
-                                        <h5 class="font-bold">{{Auth::user()->name}}</h5>
+                                        <h5 class="font-bold"><?php echo e(Auth::user()->name); ?></h5>
                                         <h6 class="text-muted mb-0">
-                                            <a href="{{ route('logout')}}" title="Đăng xuất" 
+                                            <a href="<?php echo e(route('logout')); ?>" title="Đăng xuất" 
                                             onclick="event.preventDefault(); 
                                             document.getElementById('logout-form').submit();"
                                             >Đăng xuất</a>
                                         </h6>
-                                        <form action="{{ route('logout')}}" method="post" id="logout-form">
-                                                @csrf
+                                        <form action="<?php echo e(route('logout')); ?>" method="post" id="logout-form">
+                                                <?php echo csrf_field(); ?>
                                         </form>
                                     </div>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -148,19 +148,19 @@
                                 <ul class="list-group">
                                     <li class="list-group-item d-flex justify-content-between align-items-center active">
                                         <span>Đang Online </span>
-                                        <span class="badge bg-dark badge-pill badge-round ml-1">{{number_format($traffic_count)}}</span>
+                                        <span class="badge bg-dark badge-pill badge-round ml-1"><?php echo e(number_format($traffic_count)); ?></span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <span>Tháng Vừa Qua </span>
-                                        <span class="badge badge-pill bg-warning badge-round ml-1">{{number_format($traffic_of_last_month_count)}}</span>
+                                        <span class="badge badge-pill bg-warning badge-round ml-1"><?php echo e(number_format($traffic_of_last_month_count)); ?></span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <span>Tổng Năm</span>
-                                        <span class="badge badge-pill bg-info badge-round ml-1">{{number_format($traffic_year_count)}}</span>
+                                        <span class="badge badge-pill bg-info badge-round ml-1"><?php echo e(number_format($traffic_year_count)); ?></span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <span>Tổng Truy Cập</span>
-                                        <span class="badge badge-pill bg-danger badge-round ml-1">{{ number_format($count_total_traffic)}}</span>
+                                        <span class="badge badge-pill bg-danger badge-round ml-1"><?php echo e(number_format($count_total_traffic)); ?></span>
                                     </li>
                                 </ul>
                             </div>
@@ -188,27 +188,27 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach($data as $dt)
+                                                    <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <tr>
                                                         <td class="col-3">
                                                             <div class="d-flex align-items-center">
-                                                                <p class="font-bold ms-3 mb-0">{{$dt->idfilm->name}}</p>
+                                                                <p class="font-bold ms-3 mb-0"><?php echo e($dt->idfilm->name); ?></p>
                                                             </div>
                                                         </td>
                                                         <td class="col-auto">
-                                                            <p class=" mb-0">{{$dt->idepisodeandserver->episode_name}}</p>
+                                                            <p class=" mb-0"><?php echo e($dt->idepisodeandserver->episode_name); ?></p>
                                                         </td>
-                                                        <td>{{$dt->description}}</td>
-                                                        <td>{{$dt->created_at->diffForHumans()}}</td>
-                                                        <td>@if($dt->cap_nhat == 1)
+                                                        <td><?php echo e($dt->description); ?></td>
+                                                        <td><?php echo e($dt->created_at->diffForHumans()); ?></td>
+                                                        <td><?php if($dt->cap_nhat == 1): ?>
                                                             <span class="badge bg-danger form-control">chưa xử lý</span>
-                                                            @else
+                                                            <?php else: ?>
                                                             <span class="badge bg-success form-control">đã xử lý</span>
-                                                            @endif
+                                                            <?php endif; ?>
                                                         </td>
-                                                        <td><a href="{{route('phim.show',$dt->id_film)}}" class="btn btn-primary">Chỉnh Sửa</a></td>
+                                                        <td><a href="<?php echo e(route('phim.show',$dt->id_film)); ?>" class="btn btn-primary">Chỉnh Sửa</a></td>
                                                     </tr>
-                                                    @endforeach
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -228,4 +228,6 @@
                 </div>
             </footer>
         </div>
-@stop
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\webphim\resources\views/admin/dashboard.blade.php ENDPATH**/ ?>

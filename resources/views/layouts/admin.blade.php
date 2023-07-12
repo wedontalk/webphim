@@ -81,7 +81,6 @@
     </div>
     <script src="{{asset('assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js')}}"></script>
     <script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
-    @yield('js')
     <script src="{{asset('assets/vendors/apexcharts/apexcharts.js')}}"></script>
     <script src="{{asset('assets/js/pages/dashboard.js')}}"></script>
     <script src="{{asset('assets/vendors/fontawesome/all.min.js')}}"></script>
@@ -93,90 +92,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    @yield('js')
 </body>
-<script>
-jQuery(document).ready(function($) {
-    chart7day();
-  var chart = new Morris.Bar({
-        element: 'myfirstchart',
-        // option thống kê
-        barColors: ['#435ebe', '#fc8710','#FF6541','#A4ADD3'],
-        gridTextColor:['#000000'],
-        // pointFillColors: ['#ffffff'],
-        // pointStrokeColors:['black'],
-        fillOpacity:0.8,
-        hideHover: 'auto',
-        parseTime: false,
-
-        xkey: 'name',
-        ykeys: ['view'],
-        // behaveLikeLine: true,
-
-        labels: ['lượt xem']
-    });
-
-// autoload 30 ngày đơn hàng
-    function chart7day(){
-    var _token = $('input[name="_token"]').val();
-    $.ajax({
-        url:'{{url('/admin/order-date')}}',
-        method:"post",
-        dataType:"JSON",
-        data:{_token:_token},
-
-        success:function(data)
-        {
-            chart.setData(data);
-        }
-    });
-}
-// lọc theo select
-$('.dashboard-filter').change(function(){
-        var dashboard_value = $(this).val();
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url:'{{url('/admin/dashboard-filter')}}',
-            method:"post",
-            dataType:"JSON",
-            data:{dashboard_value:dashboard_value , _token:_token},
-            success:function(data)
-            {
-                chart.setData(data);
-            }
-        });
-    });
-
-// onclick lọc theo ngày tháng
-    $('#btn-dashboard-filter').on('click',function(){
-            var from_date = $('#datepicker').val();
-            var to_date = $('#datepicker2').val();
-            var _token = $('input[name="_token"]').val();
-            $.ajax({
-                url:'{{url('/admin/filter-by-date')}}',
-                method:"post",
-                dataType:"JSON",
-                data:{from_date:from_date ,to_date:to_date, _token:_token },
-
-                success:function(data)
-                {
-                    chart.setData(data);
-                }
-            });
-        });
-
-});
-
-</script>
-<script>
-  $( function() {
-    $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
-  } );
-</script>
-<script>
-  $( function() {
-    $( "#datepicker2" ).datepicker({ dateFormat: 'yy-mm-dd' });
-  } );
-  </script>
 <script>
     $( ".sortable_slider" ).sortable({
         placeholder: 'ui-state-highlight',
@@ -199,6 +116,42 @@ $('.dashboard-filter').change(function(){
                 }
             })
         }
+    });
+</script>
+<script>
+    function delay(callback, ms) {
+        var timer = 0;
+        return function() {
+            var context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+            callback.apply(context, args);
+            }, ms || 0);
+        };
+    }
+
+    $(document).ready(function(){
+        $('#search').keyup(delay(function (e){
+        $('#hidden-ajax').html('');
+        var search = $('#search').val();
+        // alert(search);
+        if(search != ''){
+            var expression = new RegExp(search, "i");
+            $.getJSON('./json_file/movies.json', function(data){
+                $.each(data, function(key, value){
+                    if(search.length > 1){
+                    if(value.name.search(expression) != -1 || value.name2.search(expression) != -1){
+                        $('#hidden-ajax').removeClass('hidden')
+                        $('#hidden-ajax').append('<tr><td class="text-bold-500">'+value.name+'</td><td class="text-bold-500">'+value.name2+'</td><td>'+value.slug+'</td><td><img src="/uploads/'+value.image+'" alt="'+value.name+' width="100px" height="100px""></td><td><div class="btn-group mb-1"><div class="dropdown"><button class="btn btn-secondary dropdown-toggle me-1" type="button" id="dropdownMenuButtonSec" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hành Động</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButtonSec" style="margin: 0px;"><a class="dropdown-item" href="admintrator/phim/'+value.id+'">Chi Tiết</a><a class="dropdown-item" href="admintrator/phim/'+value.id+'/edit">Sửa Phim</a></div></div></div></td></tr>')
+                    }
+                    }
+                })
+            })
+        }else{
+            $('#hidden-ajax').addClass('hidden')
+        }
+        
+        },500))
     });
 </script>
 
