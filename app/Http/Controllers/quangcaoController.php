@@ -52,7 +52,6 @@ class quangcaoController extends Controller
     public function postadshome(Request $request){
         $created = new quangcao();
         // dd(Filepond::field($request->filepond));
-        $created->loai_hienthi = $request->loai_hienthi;
         $created->link = $request->link;
         if($request->has('file_upload'))
         {
@@ -72,7 +71,6 @@ class quangcaoController extends Controller
     public function postadsdanhmuc(Request $request){
         $created = new quangcao();
         // dd(Filepond::field($request->filepond));
-        $created->loai_hienthi = $request->loai_hienthi;
         $created->link = $request->link;
         if($request->has('file_upload'))
         {
@@ -91,7 +89,6 @@ class quangcaoController extends Controller
     public function postadstimkiem(Request $request){
         $created = new quangcao();
         // dd(Filepond::field($request->filepond));
-        $created->loai_hienthi = $request->loai_hienthi;
         $created->link = $request->link;
         if($request->has('file_upload'))
         {
@@ -110,7 +107,6 @@ class quangcaoController extends Controller
     public function postadschitiet(Request $request){
         $created = new quangcao();
         // dd(Filepond::field($request->filepond));
-        $created->loai_hienthi = $request->loai_hienthi;
         $created->link = $request->link;
         if($request->has('file_upload'))
         {
@@ -129,7 +125,6 @@ class quangcaoController extends Controller
     public function postadsvideo(Request $request){
         $created = new quangcao();
         // dd(Filepond::field($request->filepond));
-        $created->loai_hienthi = $request->loai_hienthi;
         $created->link = $request->link;
         if($request->has('file_upload'))
         {

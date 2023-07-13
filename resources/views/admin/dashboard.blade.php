@@ -61,7 +61,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold"></h6>
+                                                <h6 class="text-muted font-semibold">Danh Mục</h6>
                                                 <h6 class="font-extrabold mb-0">12</h6>
                                             </div>
                                         </div>

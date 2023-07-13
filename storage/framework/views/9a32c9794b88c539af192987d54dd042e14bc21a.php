@@ -439,14 +439,16 @@
               var btndelete = $(this).data('btn');
               var retrievedObject = localStorage.getItem('bookmark-list');
               review = JSON.parse(retrievedObject);
+            if(review.length > 1){
               if(review){
-                for (var i = 0; i < review.length; ++i) {
-                  const element = review[i];
-                  if(element === btndelete) {
-                    review.splice(i,i);
-                  }
+                  for (var i = 0; i < review.length; ++i) {
+                    const element = review[i];
+                    if(element === btndelete) {
+                      review.splice(i,i);
+                    }
+                }
+                localStorage.setItem('bookmark-list',JSON.stringify(review));
               }
-              localStorage.setItem('bookmark-list',JSON.stringify(review));
             }
             if(review.length==1){
               for(var i = 0; i < review.length; i++) {

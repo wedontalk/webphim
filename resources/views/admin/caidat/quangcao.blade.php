@@ -98,14 +98,7 @@
                                                                                 <div class="divider-text"><h5>Quảng cáo dành cho trang chủ</h5></div>
                                                                             </div>
                                                                                 <hr>
-                                                                                <!-- dành cho -->
-                                                                                <label for="">Loại Thông báo dành cho : </label>
-                                                                                <select class="form-control alert-primary" name="loai_hienthi" id="selectchange" style="text-align:center">
-                                                                                    <option value="" selected>- Chế độ hiễn thị -</option>
-                                                                                    <option value="1">Máy tính</option>
-                                                                                    <option value="2">Ipad</option>
-                                                                                    <option value="3">Điện thoại</option>
-                                                                                </select>
+
                                                                                 <!-- link -->
                                                                                 <div class="form-group mt-2">
                                                                                     <label for="">Link quảng cáo</label>
@@ -124,17 +117,10 @@
                                                                                         <option value="" selected>- Chọn Loại Hiễn Thị -</option>
                                                                                         <optgroup label="banner">
                                                                                             <option value="1">Banner header</option>
-                                                                                            <option value="2">Banner left</option>
-                                                                                            <option value="3">Banner right</option>
-                                                                                            <option value="4">Banner footer</option>
+                                                                                            <option value="3">Banner footer</option>
                                                                                         </optgroup>
                                                                                         <optgroup label="Thông báo">
                                                                                             <option value="5">Khung thông báo (modal)</option>
-                                                                                        </optgroup>
-                                                                                        <optgroup label="Khung position">
-                                                                                            <option value="6">khung position bottom</option>
-                                                                                            <option value="7">khung position left</option>
-                                                                                            <option value="8">khung position right</option>
                                                                                         </optgroup>
                                                                                     </select>
                                                                                 </div>
@@ -202,17 +188,11 @@
                                                                                             <option value="" selected>- Chọn Loại Hiễn Thị -</option>
                                                                                             <optgroup label="banner">
                                                                                                 <option value="1">Banner header</option>
-                                                                                                <option value="2">Banner left</option>
-                                                                                                <option value="3">Banner right</option>
-                                                                                                <option value="4">Banner footer</option>
+                                                                                                <option value="2">Banner danh mục</option>
+                                                                                                <option value="3">Banner footer</option>
                                                                                             </optgroup>
                                                                                             <optgroup label="Thông báo">
                                                                                                 <option value="5">Khung thông báo (modal)</option>
-                                                                                            </optgroup>
-                                                                                            <optgroup label="Khung position">
-                                                                                                <option value="6">khung position bottom</option>
-                                                                                                <option value="7">khung position left</option>
-                                                                                                <option value="8">khung position right</option>
                                                                                             </optgroup>
                                                                                         </select>
                                                                                     </div>
@@ -254,14 +234,7 @@
                                                                                 <div class="divider-text"><h5>Quảng cáo cho trang tìm kiếm</h5></div>
                                                                             </div>
                                                                                 <hr>
-                                                                                <!-- dành cho -->
-                                                                                <label for="">Loại Thông báo dành cho : </label>
-                                                                                <select class="form-control alert-primary" name="loai_hienthi" id="selectchange" style="text-align:center">
-                                                                                    <option value="" selected>- Chế độ hiễn thị -</option>
-                                                                                    <option value="1">Máy tính</option>
-                                                                                    <option value="2">Ipad</option>
-                                                                                    <option value="3">Điện thoại</option>
-                                                                                </select>
+
                                                                                 <!-- link -->
                                                                                 <div class="form-group mt-2">
                                                                                     <label for="">Link quảng cáo</label>
@@ -280,17 +253,11 @@
                                                                                         <option value="" selected>- Chọn Loại Hiễn Thị -</option>
                                                                                         <optgroup label="banner">
                                                                                             <option value="1">Banner header</option>
-                                                                                            <option value="2">Banner left</option>
-                                                                                            <option value="3">Banner right</option>
-                                                                                            <option value="4">Banner footer</option>
+                                                                                            <option value="2">Banner danh mục</option>
+                                                                                            <option value="3">Banner footer</option>
                                                                                         </optgroup>
                                                                                         <optgroup label="Thông báo">
                                                                                             <option value="5">Khung thông báo (modal)</option>
-                                                                                        </optgroup>
-                                                                                        <optgroup label="Khung position">
-                                                                                            <option value="6">khung position bottom</option>
-                                                                                            <option value="7">khung position left</option>
-                                                                                            <option value="8">khung position right</option>
                                                                                         </optgroup>
                                                                                     </select>
                                                                                 </div>
@@ -332,14 +299,7 @@
                                                                                 <div class="divider-text"><h5>Quảng cáo trang chi tiết</h5></div>
                                                                             </div>
                                                                                 <hr>
-                                                                                <!-- dành cho -->
-                                                                                <label for="">Loại Thông báo dành cho : </label>
-                                                                                <select class="form-control alert-primary" name="loai_hienthi" id="selectchange" style="text-align:center">
-                                                                                    <option value="" selected>- Chế độ hiễn thị -</option>
-                                                                                    <option value="1">Máy tính</option>
-                                                                                    <option value="2">Ipad</option>
-                                                                                    <option value="3">Điện thoại</option>
-                                                                                </select>
+
                                                                                 <!-- link -->
                                                                                 <div class="form-group mt-2">
                                                                                     <label for="">Link quảng cáo</label>
@@ -358,17 +318,11 @@
                                                                                         <option value="" selected>- Chọn Loại Hiễn Thị -</option>
                                                                                         <optgroup label="banner">
                                                                                             <option value="1">Banner header</option>
-                                                                                            <option value="2">Banner left</option>
-                                                                                            <option value="3">Banner right</option>
-                                                                                            <option value="4">Banner footer</option>
+                                                                                            <option value="2">Banner Danh mục</option>
+                                                                                            <option value="3">Banner footer</option>
                                                                                         </optgroup>
                                                                                         <optgroup label="Thông báo">
                                                                                             <option value="5">Khung thông báo (modal)</option>
-                                                                                        </optgroup>
-                                                                                        <optgroup label="Khung position">
-                                                                                            <option value="6">khung position bottom</option>
-                                                                                            <option value="7">khung position left</option>
-                                                                                            <option value="8">khung position right</option>
                                                                                         </optgroup>
                                                                                     </select>
                                                                                 </div>
@@ -410,14 +364,7 @@
                                                                                 <div class="divider-text"><h5>Quảng cáo cho trang xem video</h5></div>
                                                                             </div>
                                                                                 <hr>
-                                                                                <!-- dành cho -->
-                                                                                <label for="">Loại Thông báo dành cho : </label>
-                                                                                <select class="form-control alert-primary" name="loai_hienthi" id="selectchange" style="text-align:center">
-                                                                                    <option value="" selected>- Chế độ hiễn thị -</option>
-                                                                                    <option value="1">Máy tính</option>
-                                                                                    <option value="2">Ipad</option>
-                                                                                    <option value="3">Điện thoại</option>
-                                                                                </select>
+
                                                                                 <!-- link -->
                                                                                 <div class="form-group mt-2">
                                                                                     <label for="">Link quảng cáo</label>
@@ -436,17 +383,11 @@
                                                                                         <option value="" selected>- Chọn Loại Hiễn Thị -</option>
                                                                                         <optgroup label="banner">
                                                                                             <option value="1">Banner header</option>
-                                                                                            <option value="2">Banner left</option>
-                                                                                            <option value="3">Banner right</option>
-                                                                                            <option value="4">Banner footer</option>
+                                                                                            <option value="2">Banner danh mục</option>
+                                                                                            <option value="3">Banner footer</option>
                                                                                         </optgroup>
                                                                                         <optgroup label="Thông báo">
                                                                                             <option value="5">Khung thông báo (modal)</option>
-                                                                                        </optgroup>
-                                                                                        <optgroup label="Khung position">
-                                                                                            <option value="6">khung position bottom</option>
-                                                                                            <option value="7">khung position left</option>
-                                                                                            <option value="8">khung position right</option>
                                                                                         </optgroup>
                                                                                     </select>
                                                                                 </div>

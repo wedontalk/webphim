@@ -139,21 +139,10 @@
     <div class="col-12" style="text-align: center"></div>
     @include('user.slide')
     <!-- banner header -->
-    <div class="col-12" style="display:flex; justify-content:center">
-      <a href="">
-        <img src="{{asset('wp-content/uploads/banner-720.png')}}" alt="">
-      </a>
-    </div>
     <!-- end banner header -->
     @yield('main')
   <div class="clearfix"></div>
-  <!-- banner footer -->
-  <div class="col-12" style="display:flex; justify-content:center">
-    <a href="">
-      <img src="{{asset('wp-content/uploads/banner-720.png')}}" alt="">
-    </a>
-  </div>
-  <!-- end banner footer -->
+  
   <footer id="footer" class="clearfix">
     <div class="container footer-columns">
       <div class="row container">
@@ -173,29 +162,6 @@
         <div class="fb-page" data-href="https://www.facebook.com/animetvh.net/" data-tabs="timeline" data-width="500" data-height="320" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/animetvh.net/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/animetvh.net/">animetvh.net</a></blockquote></div>        </div>
       </div>
     </footer>
-    <!-- modal -->
-    <div class="modal fade" id="banner_qc" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <!-- <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5> -->
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <a href="http://127.0.0.1:8000/chi-tiet-anime/akuyaku-reijou-nanode-last-boss-wo-kattemimashita.html">
-          <div class="modal-body">
-              <img src="http://127.0.0.1:8000/uploads/1664036620-phim.jpg" alt="">
-          </div>
-          </a>
-          <!-- <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div> -->
-        </div>
-      </div>
-    </div>
-    <!-- end modal -->
     <div class="footer-credit">
       <div class="container credit">
         <div class="row container">
@@ -211,26 +177,8 @@
     <div id='easy-top'></div> 
     <script type='text/javascript' src="{{asset('wp-content/themes/halimmovies/assets/js/bootstrap.min2050.js?ver=5.2.15')}}"></script> 
     <script type='text/javascript' src="{{asset('wp-content/themes/halimmovies/assets/js/owl.carousel.min2050.js?ver=5.2.15')}}"></script> 
-    <!-- <script type='text/javascript'>/*  */
-      var halim = {"light_mode":"0","ajax_url":"https:\/\/animehot.xyz\/wp-admin\/admin-ajax.php","post_id":"6352","sync":"1"};
-    </script>  -->
     <script type='text/javascript' src="{{asset('wp-content/themes/halimmovies/assets/js/halimmovie.core.min5152.js?ver=1.0')}}"></script>
     @yield('js')
-    <script>
-      // returnauto();
-      // function returnauto(){
-      //   $.ajax({
-      //       url:'{{route("returnauto")}}',
-      //       method:"post",
-      //       dataType:"JSON",
-      //       data:{_token:'{{ csrf_token() }}'},
-      //       success:function(data)
-      //       {
-      //           //
-      //       }
-      //   });
-      // }
-    </script>
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v14.0&appId=3308862736097075&autoLogAppEvents=1" nonce="TCYniELl"></script>
       <!-- cdnjs -->

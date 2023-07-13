@@ -15,6 +15,7 @@ use App\Models\metaall;
 use App\Models\traffic;
 use App\Models\server;
 use App\Models\thongbao;
+use App\Models\quangcao;
 use DB;
 
 use Auth;
@@ -38,6 +39,7 @@ class HomeController extends Controller
             $traffic->date_traffic = Carbon::now('Asia/Ho_Chi_Minh')->toDateString();
             $traffic->save();
         }
+        // end check ip
     }
 
     /**
@@ -59,8 +61,11 @@ class HomeController extends Controller
         $data = phim::orderBy('ngaycapnhat', 'desc')->where('anHien', 1)->paginate(24);
         $showcategory = danhmuc::orderBy('id', 'asc')->where('anHien', 1)->get();
         $showtrangthai = trangthai::orderBy('id', 'asc')->get();
+        $check_quangcao = quangcao::where('trang_thai', 1)->where('id_hienthi', 5)->where('id_trang', 1)->first();
+        $qc_header = quangcao::where('trang_thai', 1)->where('id_hienthi', 1)->where('id_trang', 1)->first();
+        $qc_footer = quangcao::where('trang_thai', 1)->where('id_hienthi', 3)->where('id_trang', 1)->first();
         // $movie_theloai = phimtheloai::where('id_theloai', )->get();
-        return view('user.home', compact('data','showcategory','showtrangthai','meta_desc', 'meta_keyword', 'meta_title', 'meta_canontical'));
+        return view('user.home', compact('data','showcategory','check_quangcao','qc_header','qc_footer','showtrangthai','meta_desc', 'meta_keyword', 'meta_title', 'meta_canontical'));
     }
     public function locanime(Request $request){
         $datameta = metaall::all();
@@ -107,6 +112,7 @@ class HomeController extends Controller
                 $data = phim::orderBy('updated_at', 'desc')->where('anHien', 1)->paginate(24);
             }
         
+         // show quảng cáo
         return view('user.home', compact('data','showcategory','showtrangthai','meta_desc', 'meta_keyword', 'meta_title', 'meta_canontical'));
     }
     public function theloai($slug, Request $request){
@@ -234,7 +240,10 @@ class HomeController extends Controller
         }
         $meta_canontical = $request->url();
         $data = phim::where('name','like','%'.$request->search.'%')->orWhere('name2','like','%'.$request->search.'%')->paginate(12);
-        return view('user.search', compact('data','meta_desc', 'meta_keyword', 'meta_title', 'meta_canontical'));
+        $check_quangcao = quangcao::where('trang_thai', 1)->where('id_hienthi', 5)->where('id_trang', 3)->first();
+        $qc_header = quangcao::where('trang_thai', 1)->where('id_hienthi', 1)->where('id_trang', 3)->first();
+        $qc_footer = quangcao::where('trang_thai', 1)->where('id_hienthi', 3)->where('id_trang', 3)->first();
+        return view('user.search', compact('data','check_quangcao','qc_header','qc_footer','meta_desc', 'meta_keyword', 'meta_title', 'meta_canontical'));
     }
     public function xemphim($slug, Request $request){
         $slugxemphim = tapphim::where('slug_phim', $slug)->first();

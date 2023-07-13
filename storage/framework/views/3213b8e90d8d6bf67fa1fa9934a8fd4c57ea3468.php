@@ -85,25 +85,14 @@
                                                 <?php elseif($dt->id_hienthi == 8): ?>
                                                 <h4 class="card-title">Loại : position right</h4>
                                                 <?php endif; ?>
-                                                <p class="card-text">Chế độ hiễn thị: 
-                                                    <span style="color:#000; font-weight:800">
-                                                        <?php if($dt->loai_hienthi == 1): ?>
-                                                            Máy tính
-                                                        <?php elseif($dt->loai_hienthi == 2): ?>
-                                                            Ipad
-                                                        <?php elseif($dt->loai_hienthi == 3): ?>
-                                                            Mobile
-                                                        <?php endif; ?>
-                                                    </span>
-                                                </p>
                                             </div>
                                         </div>
                                         <div class="card-footer d-flex justify-content-between">
                                             <span>
                                                 Trạng thái quảng cáo : 
                                                 <select class="form-control" id="click_trangthai" data-id="<?php echo e($dt->id); ?>">
-                                                    <option value="1">Đang bật</option>
-                                                    <option value="2">Đang tắt</option>
+                                                    <option value="1" <?php echo e(($dt->trang_thai == 1) ? 'selected':''); ?>>Đang bật</option>
+                                                    <option value="2" <?php echo e(($dt->trang_thai == 2) ? 'selected':''); ?>>Đang tắt</option>
                                                 </select>
                                             </span>
                                             <button class="btn btn-primary">Xem thêm</button>
