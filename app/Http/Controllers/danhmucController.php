@@ -15,7 +15,7 @@ class danhmucController extends Controller
      */
     public function index()
     {
-        $data = danhmuc::orderBy('id','desc')->get();
+        $data = danhmuc::orderBy('id','desc')->paginate(10);
         return view('admin.danhmuc.index', compact('data'));
     }
 

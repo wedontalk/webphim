@@ -32,7 +32,7 @@
                     <div class="card-content">
                         <!-- table bordered -->
                         <div class="table-responsive">
-                            <table class="table table-striped" id="table1">
+                            <table class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th style="width:30px"><input type="checkbox" id="checkAll" /></th>
@@ -47,7 +47,7 @@
                                     <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $dt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr id="sid<?php echo e($dt->id); ?>">
                                     <td><input type="checkbox" class="checkboxclass" name="ids" value="<?php echo e($dt->id); ?>"></td>
-                                        <td class="text-bold-500"><?php echo e($key); ?></td>
+                                        <td class="text-bold-500"><?php echo e($key+=1); ?></td>
                                         <td><?php echo e($dt->name); ?></td>
                                         <td class="text-bold-500"><?php echo e($dt->slug); ?></td>
                                         <td>
@@ -66,6 +66,7 @@
                                 </tbody>
                             </table>
                             <hr>
+                            <div><?php echo e($data->appends(request()->all())->links()); ?></div>
                             <form method="POST" action="" id="form-delete">
                                 <?php echo method_field('DELETE'); ?>
                                 <?php echo csrf_field(); ?>
@@ -137,10 +138,10 @@
         });
     });
 </script>
-<script>
+<!-- <script>
 // Simple Datatable
     let table1 = document.querySelector('#table1');
     let dataTable = new simpleDatatables.DataTable(table1);
-</script>
+</script> -->
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\webphim\resources\views/admin/danhmuc/index.blade.php ENDPATH**/ ?>

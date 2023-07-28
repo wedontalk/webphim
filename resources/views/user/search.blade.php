@@ -22,13 +22,6 @@
   <title>{{$meta_title}}</title>
 @endsection
 @section('main')
-@if(isset($qc_header))
-<div class="col-12" style="display:flex; justify-content:center">
-  <a href="">
-    <img src="{{asset('uploads/quangcao')}}/{{$qc_header->images}}" alt="">
-  </a>
-</div>
-@endif
 <div class="container">
       <div class="row container" id="wrapper">
         <div class="halim-panel-filter">
@@ -102,38 +95,4 @@
         @include('user.theloaimain')
       </div>
     </div>
-
-
-  @if(isset($qc_footer))
-    <!-- banner footer -->
-    <div class="col-12" style="display:flex; justify-content:center">
-      <a href="">
-        <img src="{{asset('uploads/quangcao')}}/{{$qc_footer->images}}" alt="">
-      </a>
-    </div>
-    <!-- end banner footer -->
-  @endif
-  @if(isset($check_quangcao))
-    <div class="modal fade" id="banner_qc" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <!-- <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5> -->
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <a href="{{$check_quangcao->link}}">
-          <div class="modal-body">
-              <img src="{{asset('uploads/quangcao')}}/{{$check_quangcao->images}}" alt="" width="100%">
-          </div>
-          </a>
-          <!-- <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div> -->
-        </div>
-      </div>
-    </div>
-  @endif
 @endsection

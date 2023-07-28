@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\server;
-use App\Models\tapphim;
-use Validator;
+use Laravel\Socialite\Facades\Socialite;
+use Exception;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
-class serverController extends Controller
+class LoginGoogleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +17,7 @@ class serverController extends Controller
      */
     public function index()
     {
-        $data = server::orderBy('id', 'asc')->get();
-        return view('admin.server.index', compact('data'));
+        //
     }
 
     /**
@@ -27,7 +27,7 @@ class serverController extends Controller
      */
     public function create()
     {
-        return view('admin.server.create');
+        //
     }
 
     /**
@@ -38,12 +38,7 @@ class serverController extends Controller
      */
     public function store(Request $request)
     {
-        $create = new server();
-        $create->name_server = $request->name_server;
-        $create->thong_tin_them = $request->thong_tin_them;
-        $create->action = $request->action;
-        $create->save();
-        return redirect()->route('server.index')->with('success', 'thêm thành công');
+        //
     }
 
     /**
@@ -65,8 +60,7 @@ class serverController extends Controller
      */
     public function edit($id)
     {
-        $updatesv = server::find($id);
-        return view('admin.server.edit', compact('updatesv'));
+        //
     }
 
     /**
@@ -78,12 +72,7 @@ class serverController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updated = server::find($id);
-        $updated->name_server = $request->name_server;
-        $updated->thong_tin_them = $request->thong_tin_them;
-        $updated->action = $request->action;
-        $updated->save();
-        return redirect()->route('server.index')->with('success', 'sửa thành công');
+        //
     }
 
     /**
@@ -94,12 +83,44 @@ class serverController extends Controller
      */
     public function destroy($id)
     {
-        $remove = server::find($id);
-        if($remove->serverlink()->count() > 0){
-            return redirect()->route('server.index')->with('error', 'Không thể xóa server này !!');
-        }else{
-            $remove->delete();
-            return redirect()->route('server.index')->with('success', 'xóa thành công');
+        //
+    }
+
+
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        try {
+      
+            $user = Socialite::driver('google')->user();
+       
+            $finduser = User::where('google_id', $user->id)->first();
+       
+            if($finduser){
+       
+                Auth::login($finduser);
+      
+                return redirect()->intended('/');
+       
+            }else{
+                $newUser = User::create([
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'google_id'=> $user->id,
+                    'password' => encrypt('animetvh123456')
+                ]);
+      
+                Auth::login($newUser);
+      
+                return redirect()->intended('/');
+            }
+      
+        } catch (Exception $e) {
+            dd($e->getMessage());
         }
     }
 }

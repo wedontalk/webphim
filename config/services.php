@@ -13,12 +13,6 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
-    'google' => [
-        'client_id'     => '901305502877-qdtf5k7jr3tt60sk89dd26kmap5jh8i5.apps.googleusercontent.com',
-        'client_secret' => '4vc6X22K35RqV7Wge_dnTupy',
-        'redirect'      => 'http://127.0.0.1:8000/callback',
-    ],
-
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
@@ -33,6 +27,18 @@ return [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    ],
+
+    'google' => [
+        'client_id'     => '711046683089-h5ev53927ruhcsm58p2apgq5gr9gnk60.apps.googleusercontent.com',
+        'client_secret' => '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',
+        'redirect'      => env('APP_URL').'/auth/google/callback',
+    ],
+
+    'facebook' => [
+        'client_id' => '283901477696574',
+        'client_secret' => 'dd8b376dcdf23e76911eadb7f77bf9c2',
+        'redirect' => env('APP_URL').'/auth/facebook/callback',
     ],
 
 ];

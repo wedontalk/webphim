@@ -32,7 +32,7 @@
                     <div class="card-content">
                         <!-- table bordered -->
                         <div class="table-responsive">
-                            <table class="table table-striped" id="table1">
+                            <table class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th style="width:30px"><input type="checkbox" id="checkAll" /></th>
@@ -47,7 +47,7 @@
                                     @foreach($data as $key => $dt)
                                     <tr id="sid{{$dt->id}}">
                                     <td><input type="checkbox" class="checkboxclass" name="ids" value="{{$dt->id}}"></td>
-                                        <td class="text-bold-500">{{$key}}</td>
+                                        <td class="text-bold-500">{{$key+=1}}</td>
                                         <td>{{$dt->name}}</td>
                                         <td class="text-bold-500">{{$dt->slug}}</td>
                                         <td>
@@ -66,6 +66,7 @@
                                 </tbody>
                             </table>
                             <hr>
+                            <div>{{$data->appends(request()->all())->links()}}</div>
                             <form method="POST" action="" id="form-delete">
                                 @method('DELETE')
                                 @csrf
@@ -127,9 +128,9 @@
         });
     });
 </script>
-<script>
+<!-- <script>
 // Simple Datatable
     let table1 = document.querySelector('#table1');
     let dataTable = new simpleDatatables.DataTable(table1);
-</script>
+</script> -->
 @stop()

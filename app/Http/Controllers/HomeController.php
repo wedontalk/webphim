@@ -16,6 +16,8 @@ use App\Models\traffic;
 use App\Models\server;
 use App\Models\thongbao;
 use App\Models\quangcao;
+use Illuminate\Session\SessionManager;
+use Illuminate\Support\Facades\Session;
 use DB;
 
 use Auth;
@@ -27,8 +29,11 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request, SessionManager $session)
     {
+        // lấy ra session
+        $this->session = $session;
+        // lấy ra request ip
         $user_request_ip = $request->ip();
         $check_traffic = traffic::where('ip_address', $user_request_ip)->get();
         // dd($check_traffic);
@@ -36,7 +41,7 @@ class HomeController extends Controller
         if($traffic_count < 1){
             $traffic = new traffic();
             $traffic->ip_address = $user_request_ip;
-            $traffic->date_traffic = Carbon::now('Asia/Ho_Chi_Minh')->toDateString();
+            $traffic->date_traffic = Carbon::now('Asia/Ho_Chi_Minh');
             $traffic->save();
         }
         // end check ip
@@ -61,11 +66,8 @@ class HomeController extends Controller
         $data = phim::orderBy('ngaycapnhat', 'desc')->where('anHien', 1)->paginate(24);
         $showcategory = danhmuc::orderBy('id', 'asc')->where('anHien', 1)->get();
         $showtrangthai = trangthai::orderBy('id', 'asc')->get();
-        $check_quangcao = quangcao::where('trang_thai', 1)->where('id_hienthi', 5)->where('id_trang', 1)->first();
-        $qc_header = quangcao::where('trang_thai', 1)->where('id_hienthi', 1)->where('id_trang', 1)->first();
-        $qc_footer = quangcao::where('trang_thai', 1)->where('id_hienthi', 3)->where('id_trang', 1)->first();
         // $movie_theloai = phimtheloai::where('id_theloai', )->get();
-        return view('user.home', compact('data','showcategory','check_quangcao','qc_header','qc_footer','showtrangthai','meta_desc', 'meta_keyword', 'meta_title', 'meta_canontical'));
+        return view('user.home', compact('data','showcategory','showtrangthai','meta_desc', 'meta_keyword', 'meta_title', 'meta_canontical'));
     }
     public function locanime(Request $request){
         $datameta = metaall::all();
@@ -96,18 +98,6 @@ class HomeController extends Controller
                 $data = phim::orderBy('updated_at', 'desc')->where('status', $trangthai)->whereIn('id', $nhieuphim)->where('anHien', 1)->paginate(24);
             }elseif ($sapxep == "duocxemnhieu" && $theloai != "" && $trangthai !="") {
                 $data = phim::orderBy('updated_at', 'desc')->where('phim_noibat', 3)->where('status', $trangthai)->whereIn('id', $nhieuphim)->where('anHien', 1)->paginate(24);
-            }elseif($theloai == "" && $trangthai != ""){
-                $data = phim::orderBy('updated_at', 'desc')->where('status', $trangthai)->where('anHien', 1)->paginate(24);
-            }elseif($theloai != "" && $trangthai == "" && $sapxep ==""){
-                $data = phim::orderBy('updated_at', 'desc')->whereIn('id', $nhieuphim)->where('anHien', 1)->paginate(24);
-            }elseif($theloai == "" && $trangthai =="" && $sapxep == "tuadenz"){
-                $data = phim::orderBy('name', 'asc')->where('anHien', 1)->paginate(24);
-            }elseif ($theloai == "" && $trangthai =="" && $sapxep == "tuzdena") {
-                $data = phim::orderBy('name', 'desc')->where('anHien', 1)->paginate(24);
-            }elseif($theloai == "" && $trangthai =="" && $sapxep == "ngaycapnhat"){
-                $data = phim::orderBy('updated_at', 'desc')->where('anHien', 1)->paginate(24);
-            }elseif($theloai == "" && $trangthai =="" && $sapxep == "duocxemnhieu"){
-                $data = phim::orderBy('updated_at', 'desc')->where('phim_noibat', 3)->where('anHien', 1)->paginate(24);
             }else{
                 $data = phim::orderBy('updated_at', 'desc')->where('anHien', 1)->paginate(24);
             }
@@ -178,42 +168,38 @@ class HomeController extends Controller
     }
     public function timkiemanime(Request $request){
         $trangthaitk = $_GET['status'];
+        $tapphimtk = $_GET['tapphim'];
         $showtrangthai = trangthai::orderBy('id', 'asc')->get();
         if(isset($_GET['timkiemtheloai'])){
             $theloaitk = $_GET['timkiemtheloai'];
-            $tapphimtk = $_GET['tapphim'];
             // $data = phim::orderBy('updated_at', 'desc')->where('anHien', 1)->paginate(24);
             $movie_theloai = phimtheloai::whereIn('id_theloai', $theloaitk)->get();
             $nhieuphim = [];
             foreach ($movie_theloai as $key => $value) {
                 $nhieuphim[] = $value->id_phim;
             };
-        }
-        if(isset($_GET['timkiemtheloai']) && $theloaitk != ""){
-        $data = phim::orderBy('updated_at', 'desc')
-        ->whereIn('id', $nhieuphim)
-        ->where('status', $trangthaitk)
-        ->where('anHien', 1)->paginate(24);
-        }elseif(isset($_GET['timkiemtheloai']) && $theloaitk != "" && $trangthaitk == ""){
+            if($theloaitk != ""  && $trangthaitk != ""){
             $data = phim::orderBy('updated_at', 'desc')
+            ->whereIn('id', $nhieuphim)
+            ->where('status', $trangthaitk)
+            ->when($request->tapphim, function($query, $epi){
+                $query->whereHas('tapphim', function($query) use($epi){
+                    $query->where('episode', '>=',$epi);
+                });
+            })
             ->where('anHien', 1)->paginate(24);
-        }elseif(!isset($_GET['timkiemtheloai']) && $trangthaitk == ""){
-            $data = phim::orderBy('updated_at', 'desc')
-            ->where('anHien', 1)->paginate(24);  
+            }
+            // dd(tapphim::orderBy('id')->select('episode')->where('episode','>=', 50)->get());
         }
-
-        if(isset($data)){
-            return view('user.timanime', compact('data','showtrangthai'));
-        }else{
-            return view('user.timanime', compact('showtrangthai'));
-        }
+        
+        return (isset($data)) ?  view('user.timanime', compact('data','showtrangthai')):view('user.timanime', compact('showtrangthai'));
     }
     public function chitiet($slug, Request $request){
         $slugchitiet = phim::where('slug', $slug)->first();
         $tap_phim = tapphim::with('phim')->orderBy('id','ASC')->where('film_id',$slugchitiet->id)->first();
         $thongtin = phim::with('cat','nhieutheloai','tapphim')->where('id', $slugchitiet->id)->get();
         $thongtinphim = phim::with('nhieutheloai')->where('id', $slugchitiet->id)->first();
-        $showtapphim = tapphim::orderBy('id', 'desc')->where('film_id', $slugchitiet->id)->get()->unique('episode');
+        $showtapphim = tapphim::orderBy('episode', 'desc')->where('film_id', $slugchitiet->id)->get()->unique('episode');
         $showtapphimmax = tapphim::where('film_id', $slugchitiet->id)->max('episode');
         $showphimlienquan = phim::orderBy('ngaycapnhat','desc')->where('id_theloai', $slugchitiet->id_theloai)->where('id', '!=', $slugchitiet->id)->where('anHien', 1)->take(8)->get();
         if(ctype_digit($thongtinphim->showphimfirst->max('episode'))){
@@ -240,10 +226,7 @@ class HomeController extends Controller
         }
         $meta_canontical = $request->url();
         $data = phim::where('name','like','%'.$request->search.'%')->orWhere('name2','like','%'.$request->search.'%')->paginate(12);
-        $check_quangcao = quangcao::where('trang_thai', 1)->where('id_hienthi', 5)->where('id_trang', 3)->first();
-        $qc_header = quangcao::where('trang_thai', 1)->where('id_hienthi', 1)->where('id_trang', 3)->first();
-        $qc_footer = quangcao::where('trang_thai', 1)->where('id_hienthi', 3)->where('id_trang', 3)->first();
-        return view('user.search', compact('data','check_quangcao','qc_header','qc_footer','meta_desc', 'meta_keyword', 'meta_title', 'meta_canontical'));
+        return view('user.search', compact('data','meta_desc', 'meta_keyword', 'meta_title', 'meta_canontical'));
     }
     public function xemphim($slug, Request $request){
         $slugxemphim = tapphim::where('slug_phim', $slug)->first();
@@ -252,31 +235,28 @@ class HomeController extends Controller
         $showtapphim = tapphim::orderBy('id', 'desc')->where('film_id', $slugxemphim->film_id)->get();
         $showtapphimmax = tapphim::where('film_id', $slugxemphim->film_id)->max('episode');
         $showphimlienquan = phim::orderBy('ngaycapnhat','desc')->where('id_theloai', $showphimfirst->id_theloai)->where('id', '!=', $slugxemphim->id)->where('anHien', 1)->take(8)->get();
-        $showtapphimtheoserver = tapphim::orderBy('id', 'desc')->where('film_id', $slugxemphim->film_id)->get();
-        $showlistunique = tapphim::orderBy('id', 'desc')->where('film_id', $slugxemphim->film_id)->get()->unique('episode');
+        // show server tập phim
+        $showtapphimtheoserver = tapphim::orderBy('id', 'asc')
+        ->where('slug_phim', $slugxemphim->slug_phim)
+        ->select('id_server','content')
+        ->groupBy('id_server')
+        ->havingRaw('COUNT(*) > 0')
+        ->get();
+        // show tập phim
+        $showlistunique = tapphim::orderBy('episode', 'desc')->where('film_id', $slugxemphim->film_id)->get()->unique('episode');
         $showphimtap = tapphim::where('id', $slugxemphim->id)->first();
-        $server = [];
-        $showserver = server::with('serverlink')->where('action', '1')->get();
-        foreach ($showserver as $key => $val) {
-            $server[] = $val->id;
-        }
-        // $testserver = [];
-        // foreach ($showtapphim->unique('id_server') as $key => $value) {
-        //     $testserver[] = $value->id_server;
-        // }
-        // $textxem = collect($testserver);
-        // dd($showtapphim);
-        $serverlist = tapphim::orderBy('id', 'asc')->where('film_id', $slugxemphim->film_id)->get()->unique('id_server');
+        // tăng lượt xem
         if($slugxemphim){
             tapphim::find($slugxemphim->id)->increment('view_episode');
         }
+        // hiễn thị một số thẻ meta để seo web
         foreach ($showphim as $luu) {
             $meta_desc = $luu->meta_desc;
             $meta_keyword = $luu->meta_keyword;
             $meta_title = $luu->name;
             $meta_canontical = $request->url();
         }
-        return view('user.xemphim', compact('showserver','showphim','serverlist','showphimtap','showphimfirst','showtapphim','showtapphimmax','showphimlienquan','showtapphimtheoserver','showlistunique','meta_desc', 'meta_keyword', 'meta_title', 'meta_canontical'));
+        return view('user.xemphim', compact('showphim','showphimtap','showphimfirst','showtapphim','showtapphimmax','showphimlienquan','showtapphimtheoserver','showlistunique','meta_desc', 'meta_keyword', 'meta_title', 'meta_canontical'));
     }
 
     public function baoloitapphim(Request $request){
@@ -303,7 +283,7 @@ class HomeController extends Controller
         foreach (json_decode($localStorageData) as $key => $val) {
            $review[] = $val;
         }
-        $data = phim::orderBy('ngaycapnhat','desc')->whereIn('id', $review)->select('id','name','name2','image','slug')->where('anHien', 1)->paginate(9);
+        $data = phim::orderBy('ngaycapnhat','desc')->whereIn('id', $review)->select('id','name','name2','image','slug')->where('anHien', 1)->paginate(6);
         return response()->json(['data' => $data]);
     }
 

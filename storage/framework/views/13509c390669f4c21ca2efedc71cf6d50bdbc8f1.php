@@ -22,19 +22,12 @@
   <title><?php echo e($meta_title); ?></title>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('main'); ?>
-<?php if(isset($qc_header)): ?>
-<div class="col-12" style="display:flex; justify-content:center">
-  <a href="">
-    <img src="<?php echo e(asset('uploads/quangcao')); ?>/<?php echo e($qc_header->images); ?>" alt="">
-  </a>
-</div>
-<?php endif; ?>
 <div class="container">
     <div class="row container" id="wrapper">
       <div class="halim-panel-filter">
         <div class="panel-heading">
           <div class="row">
-            <div class="col-xs-6"> kenhanime.pro</div>
+            <div class="col-xs-6">animetvh.com</div>
             <div class="col-xs-6 text-right">
               <a href="javascript:;" id="expand-ajax-filter">Lọc Anime <i id="ajax-filter-icon" class="hl-angle-down"></i></a>
             </div>
@@ -43,13 +36,14 @@
         <div id="ajax-filter" class="panel-collapse collapse" aria-expanded="true" role="menu">
         <div class="halim-search-filter">
         <div class="btn-group col-md-12">
+ 
             <form id="form-filter" class="form-inline" method="GET" action="<?php echo e(route('locanime')); ?>">
                 <div class="col-md-4 col-xs-12 col-sm-6">
                     <div class="filter-box">
                     <div class="filter-box-title">Thể Loại</div>
                         <select class="form-control" id="sort" name="theloai">
                             <?php $__currentLoopData = $showcategory; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $showcate): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($showcate->id); ?>"><?php echo e($showcate->name); ?></option>
+                            <option value="<?php echo e($showcate->id); ?>" <?php echo e((isset($_GET['theloai']) && $_GET['theloai'] == $showcate->id) ? "selected":""); ?>><?php echo e($showcate->name); ?></option>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
@@ -59,7 +53,7 @@
                     <div class="filter-box-title">Trạng Thái</div>
                         <select class="form-control" id="category" name="trangthai"> 
                           <?php $__currentLoopData = $showtrangthai; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $showtt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <option value="<?php echo e($showtt->id); ?>"><?php echo e($showtt->name); ?></option>
+                          <option value="<?php echo e($showtt->id); ?>" <?php echo e((isset($_GET['trangthai']) && $_GET['trangthai'] == $showtt->id) ? "selected":""); ?>><?php echo e($showtt->name); ?></option>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
@@ -68,10 +62,10 @@
                     <div class="filter-box">
                       <div class="filter-box-title">Sắp xếp theo</div>    
                       <select class="form-control" id="status" name="status">
-                          <option value="tuadenz">Từ A -> Z</option>
-                          <option value="tuzdena">Từ theo Z -> A</option>
-                          <option value="ngaycapnhat">Ngày Cập nhật</option>
-                          <option value="duocxemnhieu">Được xem nhiều</option>
+                          <option value="tuadenz" <?php echo e((isset($_GET['status']) && $_GET['status'] == "tuadenz") ? "selected":""); ?>>Từ A -> Z</option>
+                          <option value="tuzdena" <?php echo e((isset($_GET['status']) && $_GET['status'] == "tuzdena") ? "selected":""); ?>>Từ theo Z -> A</option>
+                          <option value="ngaycapnhat" <?php echo e((isset($_GET['status']) && $_GET['status'] == "ngaycapnhat") ? "selected":""); ?>>Ngày Cập nhật</option>
+                          <option value="duocxemnhieu" <?php echo e((isset($_GET['status']) && $_GET['status'] == "duocxemnhieu") ? "selected":""); ?>>Được xem nhiều</option>
                       </select>                                   
                     </div>
                 </div>
@@ -130,40 +124,6 @@
       <!-- <?php echo $__env->make('user.theloaimain', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?> -->
     </div>
   </div>
-  <?php if(isset($qc_footer)): ?>
-    <!-- banner footer -->
-    <div class="col-12" style="display:flex; justify-content:center">
-    <a href="">
-      <img src="<?php echo e(asset('uploads/quangcao')); ?>/<?php echo e($qc_footer->images); ?>" alt="">
-    </a>
-  </div>
-  <!-- end banner footer -->
-  <?php endif; ?>
-      <!-- modal -->
-  <?php if(isset($check_quangcao)): ?>
-    <div class="modal fade" id="banner_qc" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <!-- <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5> -->
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <a href="<?php echo e($check_quangcao->link); ?>">
-          <div class="modal-body">
-              <img src="<?php echo e(asset('uploads/quangcao')); ?>/<?php echo e($check_quangcao->images); ?>" alt="" width="100%">
-          </div>
-          </a>
-          <!-- <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div> -->
-        </div>
-      </div>
-    </div>
-  <?php endif; ?>
-    <!-- end modal -->
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('js'); ?>
   

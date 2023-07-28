@@ -39,19 +39,6 @@
             <div class="card-content">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="exampleFormControlSelect1">Danh sách quảng cáo</label>
-                                <select class="form-control" name="danhsach" id="showdanhsach">
-                                    <option value="{{Request::url()}}?danhsach=0">Tất cả</option>
-                                    <option value="{{Request::url()}}?danhsach=1">Trang chủ</option>
-                                    <option value="{{Request::url()}}?danhsach=2">Danh mục</option>
-                                    <option value="{{Request::url()}}?danhsach=3">Tìm kiếm</option>
-                                    <option value="{{Request::url()}}?danhsach=4">Chi tiết</option>
-                                    <option value="{{Request::url()}}?danhsach=5">Xem video</option>
-                                </select>
-                            </div>
-                        </div>
                         <div class="col-md-12 mt-2">
                             <center><h4>- Danh sách -</h4></center>
                             <br>
@@ -71,19 +58,11 @@
                                                 @if($dt->id_hienthi == 1)
                                                 <h4 class="card-title">Loại : banner header</h4>
                                                 @elseif($dt->id_hienthi == 2)
-                                                <h4 class="card-title">Loại : banner left</h4>
-                                                @elseif($dt->id_hienthi == 3)
                                                 <h4 class="card-title">Loại : banner right</h4>
-                                                @elseif($dt->id_hienthi == 4)
+                                                @elseif($dt->id_hienthi == 3)
                                                 <h4 class="card-title">Loại : banner footer</h4>
-                                                @elseif($dt->id_hienthi == 5)
+                                                @elseif($dt->id_hienthi == 4)
                                                 <h4 class="card-title">Loại : Khung Thông báo (modal)</h4>
-                                                @elseif($dt->id_hienthi == 6)
-                                                <h4 class="card-title">Loại : position bottom</h4>
-                                                @elseif($dt->id_hienthi == 7)
-                                                <h4 class="card-title">Loại : position left</h4>
-                                                @elseif($dt->id_hienthi == 8)
-                                                <h4 class="card-title">Loại : position right</h4>
                                                 @endif
                                             </div>
                                         </div>
@@ -188,23 +167,6 @@
             })
         })
     })
-</script>
-<!-- show danh sách -->
-<script>
-    jQuery(document).ready(function($){
-        $('#showdanhsach').change(function(e){
-           var namedanhsach = $(this).val();
-           if(namedanhsach){
-            window.location = namedanhsach
-           }
-           return false;
-        });
-        locdanhsach();
-        function locdanhsach() {
-            var namedanhsach = window.location.href;
-            $('select[name="danhsach"]').find('option[value="'+namedanhsach+'"]').attr("selected",true);
-        }
-    });
 </script>
 <!-- click trạng thái -->
 <script>

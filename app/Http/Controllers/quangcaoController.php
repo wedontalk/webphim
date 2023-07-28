@@ -49,9 +49,17 @@ class quangcaoController extends Controller
         return view('admin.caidat.showquangcao', compact('data'));
     }
 
-    public function postadshome(Request $request){
+    public function postadsdanhmuc(Request $request){
+        $request->validate([
+            'id_hienthi' => 'required|unique:quang_cao',
+            'link'=>'required'
+        ],
+        [
+            'id_hienthi.required' => 'chỗ này không được để trống',
+            'id_hienthi.unique' => 'phần này đã có trong CSDL',
+            'link.required' => 'chỗ này không được để trống',
+        ]);
         $created = new quangcao();
-        // dd(Filepond::field($request->filepond));
         $created->link = $request->link;
         if($request->has('file_upload'))
         {
@@ -62,84 +70,14 @@ class quangcaoController extends Controller
             $created->images = $file_name;
         }
         $created->id_hienthi = $request->id_hienthi;
-        $created->id_trang = 1;
         $created->trang_thai = $request->trang_thai;
-        $created->save();
-        return redirect()->route('caidat.quangcao')->with('success', 'thêm thành công');
+        if($created->save()){
+            return redirect()->route('caidat.quangcao')->with('success', 'thêm thành công');
+        }else{
+            return redirect()->route('caidat.quangcao')->with('error', 'không thành công !');
+        }
     }
 
-    public function postadsdanhmuc(Request $request){
-        $created = new quangcao();
-        // dd(Filepond::field($request->filepond));
-        $created->link = $request->link;
-        if($request->has('file_upload'))
-        {
-            $file= $request->file_upload;
-            $ext = $request->file_upload->extension();
-            $file_name = time().'-'.'quangcao.'.$ext;
-            $file->move(public_path('uploads/quangcao'), $file_name);
-            $created->images = $file_name;
-        }
-        $created->id_hienthi = $request->id_hienthi;
-        $created->id_trang = 2;
-        $created->trang_thai = $request->trang_thai;
-        $created->save();
-        return redirect()->route('caidat.quangcao')->with('success', 'thêm thành công');
-    }
-    public function postadstimkiem(Request $request){
-        $created = new quangcao();
-        // dd(Filepond::field($request->filepond));
-        $created->link = $request->link;
-        if($request->has('file_upload'))
-        {
-            $file= $request->file_upload;
-            $ext = $request->file_upload->extension();
-            $file_name = time().'-'.'quangcao.'.$ext;
-            $file->move(public_path('uploads/quangcao'), $file_name);
-            $created->images = $file_name;
-        }
-        $created->id_hienthi = $request->id_hienthi;
-        $created->id_trang = 3;
-        $created->trang_thai = $request->trang_thai;
-        $created->save();
-        return redirect()->route('caidat.quangcao')->with('success', 'thêm thành công');
-    }
-    public function postadschitiet(Request $request){
-        $created = new quangcao();
-        // dd(Filepond::field($request->filepond));
-        $created->link = $request->link;
-        if($request->has('file_upload'))
-        {
-            $file= $request->file_upload;
-            $ext = $request->file_upload->extension();
-            $file_name = time().'-'.'quangcao.'.$ext;
-            $file->move(public_path('uploads/quangcao'), $file_name);
-            $created->images = $file_name;
-        }
-        $created->id_hienthi = $request->id_hienthi;
-        $created->id_trang = 4;
-        $created->trang_thai = $request->trang_thai;
-        $created->save();
-        return redirect()->route('caidat.quangcao')->with('success', 'thêm thành công');
-    }
-    public function postadsvideo(Request $request){
-        $created = new quangcao();
-        // dd(Filepond::field($request->filepond));
-        $created->link = $request->link;
-        if($request->has('file_upload'))
-        {
-            $file= $request->file_upload;
-            $ext = $request->file_upload->extension();
-            $file_name = time().'-'.'quangcao.'.$ext;
-            $file->move(public_path('uploads/quangcao'), $file_name);
-            $created->images = $file_name;
-        }
-        $created->id_hienthi = $request->id_hienthi;
-        $created->id_trang = 5;
-        $created->trang_thai = $request->trang_thai;
-        $created->save();
-        return redirect()->route('caidat.quangcao')->with('success', 'thêm thành công');
-    }
     public function tmpupload(Request $request){
         $image = $request->file('image');
         $file_name = $image->getClientOriginalExtension();

@@ -39,6 +39,10 @@
             padding: 0 0.6rem;
             display: block;
         }
+        .box-social{
+            padding: 15px;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
     </style>
 </head>
 <body>
@@ -122,7 +126,7 @@
         })
     });
 </script>
-<script>
+<!-- <script>
     // save pass
     jQuery(document).ready(function(){
         $('.btn-block').on('click', function(){
@@ -186,6 +190,6 @@
         return true;
         }
         });
-</script>
+</script> -->
 </html>
 <?php /**PATH C:\xampp\htdocs\webphim\resources\views/layouts/app.blade.php ENDPATH**/ ?>

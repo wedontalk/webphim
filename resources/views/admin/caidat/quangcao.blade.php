@@ -70,45 +70,26 @@
                             <div class="card-content">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-3">
-                                            <div class="list-group" id="list-tab" role="tablist">
-                                            <a class="list-group-item list-group-item-action active" id="list-trangchu-list" data-toggle="list" href="#list-trangchu" role="tab" aria-controls="trangchu">Trang chủ</a>
-                                            <a class="list-group-item list-group-item-action" id="list-danhmuc-list" data-toggle="list" href="#list-danhmuc" role="tab" aria-controls="danhmuc">Trang Danh mục</a>
-                                            <a class="list-group-item list-group-item-action" id="list-timkiem-list" data-toggle="list" href="#list-timkiem" role="tab" aria-controls="timkiem">Trang Tìm kiếm</a>
-                                            <a class="list-group-item list-group-item-action" id="list-chitiet-list" data-toggle="list" href="#list-chitiet" role="tab" aria-controls="chitiet">Trang chi tiết</a>
-                                            <a class="list-group-item list-group-item-action" id="list-video-list" data-toggle="list" href="#list-video" role="tab" aria-controls="video">Trang xem video</a>
-                                            </div>
-                                            <div class="form-group mt-3">
-                                                <img src="" id="show_img" alt="" style="width:100%; height:100%; display:none">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-9">
-                                            <div class="tab-content" id="nav-tabContent">
-                                            <div class="tab-pane fade show active" id="list-trangchu" role="tabpanel" aria-labelledby="list-trangchu-list">
+                                        <div class="col-sm-12">
                                                 <div class="row">
                                                     <div class="col-md-12" style=" border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
                                                         <div class="row">
                                                             <div class="col">
                                                                 <div class="" id="bannerheader">
-                                                                    <form action="{{route('postadshome')}}" method="POST" role="form" enctype="multipart/form-data">
+                                                                    <form action="{{route('postadsdanhmuc')}}" method="POST" role="form" enctype="multipart/form-data">
                                                                         @csrf
                                                                         <div class="card card-body">
                                                                             <div id="form-banner-trangchu-maytinh" class="col-md-12 mt-2">
                                                                             <div class="divider">
-                                                                                <div class="divider-text"><h5>Quảng cáo dành cho trang chủ</h5></div>
+                                                                                <div class="divider-text"><h5>Quảng cáo</h5></div>
                                                                             </div>
-                                                                                <hr>
-
                                                                                 <!-- link -->
                                                                                 <div class="form-group mt-2">
                                                                                     <label for="">Link quảng cáo</label>
                                                                                     <input type="text" class="form-control" name="link" placeholder="Link quảng cáo">
-                                                                                </div>
-                                                                                <!-- images -->
-                                                                                <div class="form-group">
-                                                                                    <label for="exampleInputPassword1">Images</label>
-                                                                                    <!-- <input type="file" onchange="onFileSelected()" class="image-preview-filepond" name="filepond" accept="image/png, image/jpeg, image/gif" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="3"> -->
-                                                                                    <input type="file" id="setimg" name="file_upload" class="form-control">
+                                                                                    @error('link')
+                                                                                        <small class="form-text text-muted">{{$message}}</small>
+                                                                                    @enderror
                                                                                 </div>
                                                                                 <!-- chọn chỗ để quảng cáo -->
                                                                                 <div class="form-group">
@@ -117,12 +98,25 @@
                                                                                         <option value="" selected>- Chọn Loại Hiễn Thị -</option>
                                                                                         <optgroup label="banner">
                                                                                             <option value="1">Banner header</option>
+                                                                                            <option value="2">Banner danh mục</option>
                                                                                             <option value="3">Banner footer</option>
                                                                                         </optgroup>
                                                                                         <optgroup label="Thông báo">
-                                                                                            <option value="5">Khung thông báo (modal)</option>
+                                                                                            <option value="4">Khung thông báo (modal)</option>
+                                                                                        </optgroup>
+                                                                                        <optgroup label="Click">
+                                                                                            <option value="5">Quản Cáo click</option>
                                                                                         </optgroup>
                                                                                     </select>
+                                                                                    @error('id_hienthi')
+                                                                                        <small class="form-text text-muted">{{$message}}</small>
+                                                                                    @enderror
+                                                                                </div>
+                                                                                <!-- images -->
+                                                                                <div class="form-group" id="clickNotImage">
+                                                                                    <label for="exampleInputPassword1">Images</label>
+                                                                                    <!-- <input type="file" onchange="onFileSelected()" class="image-preview-filepond" name="filepond" accept="image/png, image/jpeg, image/gif" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="3"> -->
+                                                                                    <input type="file" id="setimg" name="file_upload" class="form-control">
                                                                                 </div>
                                                                                 <!-- check hoạt động -->
                                                                                 <div class="form-check form-check-inline">
@@ -145,277 +139,9 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <img class="show_img" id="show_img" width="300px"/>
                                                 </div>
-                                            </div>
-                                            <!-- end trang chủ -->
-                                            <div class="tab-pane fade" id="list-danhmuc" role="tabpanel" aria-labelledby="list-danhmuc-list">
-                                                <div class="row">
-                                                        <div class="col-md-12" style=" border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="" id="bannerheader">
-                                                                        <form action="{{route('postadsdanhmuc')}}" method="POST" role="form" enctype="multipart/form-data">
-                                                                            @csrf
-                                                                            <div class="card card-body">
-                                                                                <div id="form-banner-trangchu-maytinh" class="col-md-12 mt-2">
-                                                                                <div class="divider">
-                                                                                    <div class="divider-text"><h5>Quảng cáo cho trang danh mục</h5></div>
-                                                                                </div>
-                                                                                    <hr>
-                                                                                    <!-- dành cho -->
-                                                                                    <label for="">Loại Thông báo dành cho : </label>
-                                                                                    <select class="form-control alert-primary" name="loai_hienthi" id="selectchange" style="text-align:center">
-                                                                                        <option value="" selected>- Chế độ hiễn thị -</option>
-                                                                                        <option value="1">Máy tính</option>
-                                                                                        <option value="2">Ipad</option>
-                                                                                        <option value="3">Điện thoại</option>
-                                                                                    </select>
-                                                                                    <!-- link -->
-                                                                                    <div class="form-group mt-2">
-                                                                                        <label for="">Link quảng cáo</label>
-                                                                                        <input type="text" class="form-control" name="link" placeholder="Link quảng cáo">
-                                                                                    </div>
-                                                                                    <!-- images -->
-                                                                                    <div class="form-group">
-                                                                                        <label for="exampleInputPassword1">Images</label>
-                                                                                        <!-- <input type="file" onchange="onFileSelected()" class="image-preview-filepond" name="filepond" accept="image/png, image/jpeg, image/gif" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="3"> -->
-                                                                                        <input type="file" id="setimg" name="file_upload" class="form-control">
-                                                                                    </div>
-                                                                                    <!-- chọn chỗ để quảng cáo -->
-                                                                                    <div class="form-group">
-                                                                                        <label for="">Chọn loại thông báo</label>
-                                                                                        <select class="form-control" name="id_hienthi" id="select-hienthi">
-                                                                                            <option value="" selected>- Chọn Loại Hiễn Thị -</option>
-                                                                                            <optgroup label="banner">
-                                                                                                <option value="1">Banner header</option>
-                                                                                                <option value="2">Banner danh mục</option>
-                                                                                                <option value="3">Banner footer</option>
-                                                                                            </optgroup>
-                                                                                            <optgroup label="Thông báo">
-                                                                                                <option value="5">Khung thông báo (modal)</option>
-                                                                                            </optgroup>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                    <!-- check hoạt động -->
-                                                                                    <div class="form-check form-check-inline">
-                                                                                        <input class="form-check-input form-check-success" type="radio" name="trang_thai" id="inlineRadio1" value="1" checked>
-                                                                                        <label class="form-check-label" for="inlineRadio1">Bật trạng thái</label>
-                                                                                    </div>
-                                                                                    <div class="form-check form-check-inline">
-                                                                                        <input class="form-check-input form-check-danger" type="radio" name="trang_thai" id="inlineRadio2" value="2">
-                                                                                        <label class="form-check-label" for="inlineRadio2">Tắt trạng thái</label>
-                                                                                    </div>
-                                                                                    <div class="form-group mt-3">
-                                                                                        <button type="submit" class="btn btn-primary">Đăng quảng cáo</button>
-                                                                                    </div>
-                                                                                    <!-- submit -->
-                                                                                </div>
-
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                </div>
-                                            </div>
                                             <!-- end trang danh mục -->
-                                            <div class="tab-pane fade" id="list-timkiem" role="tabpanel" aria-labelledby="list-timkiem-list">
-                                                <div class="row">
-                                                    <div class="col-md-12" style=" border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <div class="" id="bannerheader">
-                                                                    <form action="{{route('postadstimkiem')}}" method="POST" role="form" enctype="multipart/form-data">
-                                                                        @csrf
-                                                                        <div class="card card-body">
-                                                                            <div id="form-banner-trangchu-maytinh" class="col-md-12 mt-2">
-                                                                            <div class="divider">
-                                                                                <div class="divider-text"><h5>Quảng cáo cho trang tìm kiếm</h5></div>
-                                                                            </div>
-                                                                                <hr>
-
-                                                                                <!-- link -->
-                                                                                <div class="form-group mt-2">
-                                                                                    <label for="">Link quảng cáo</label>
-                                                                                    <input type="text" class="form-control" name="link" placeholder="Link quảng cáo">
-                                                                                </div>
-                                                                                <!-- images -->
-                                                                                <div class="form-group">
-                                                                                    <label for="exampleInputPassword1">Images</label>
-                                                                                    <!-- <input type="file" onchange="onFileSelected()" class="image-preview-filepond" name="filepond" accept="image/png, image/jpeg, image/gif" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="3"> -->
-                                                                                    <input type="file" id="setimg" name="file_upload" class="form-control">
-                                                                                </div>
-                                                                                <!-- chọn chỗ để quảng cáo -->
-                                                                                <div class="form-group">
-                                                                                    <label for="">Chọn loại thông báo</label>
-                                                                                    <select class="form-control" name="id_hienthi" id="select-hienthi">
-                                                                                        <option value="" selected>- Chọn Loại Hiễn Thị -</option>
-                                                                                        <optgroup label="banner">
-                                                                                            <option value="1">Banner header</option>
-                                                                                            <option value="2">Banner danh mục</option>
-                                                                                            <option value="3">Banner footer</option>
-                                                                                        </optgroup>
-                                                                                        <optgroup label="Thông báo">
-                                                                                            <option value="5">Khung thông báo (modal)</option>
-                                                                                        </optgroup>
-                                                                                    </select>
-                                                                                </div>
-                                                                                <!-- check hoạt động -->
-                                                                                <div class="form-check form-check-inline">
-                                                                                    <input class="form-check-input form-check-success" type="radio" name="trang_thai" id="inlineRadio1" value="1" checked>
-                                                                                    <label class="form-check-label" for="inlineRadio1">Bật trạng thái</label>
-                                                                                </div>
-                                                                                <div class="form-check form-check-inline">
-                                                                                    <input class="form-check-input form-check-danger" type="radio" name="trang_thai" id="inlineRadio2" value="2">
-                                                                                    <label class="form-check-label" for="inlineRadio2">Tắt trạng thái</label>
-                                                                                </div>
-                                                                                <div class="form-group mt-3">
-                                                                                    <button type="submit" class="btn btn-primary">Đăng quảng cáo</button>
-                                                                                </div>
-                                                                                <!-- submit -->
-                                                                            </div>
-
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- end trang tìm kiếm -->
-                                            <div class="tab-pane fade" id="list-chitiet" role="tabpanel" aria-labelledby="list-chitiet-list">
-                                                <div class="row">
-                                                    <div class="col-md-12" style=" border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <div class="" id="bannerheader">
-                                                                    <form action="{{route('postadschitiet')}}" method="POST" role="form" enctype="multipart/form-data">
-                                                                        @csrf
-                                                                        <div class="card card-body">
-                                                                            <div id="form-banner-trangchu-maytinh" class="col-md-12 mt-2">
-                                                                            <div class="divider">
-                                                                                <div class="divider-text"><h5>Quảng cáo trang chi tiết</h5></div>
-                                                                            </div>
-                                                                                <hr>
-
-                                                                                <!-- link -->
-                                                                                <div class="form-group mt-2">
-                                                                                    <label for="">Link quảng cáo</label>
-                                                                                    <input type="text" class="form-control" name="link" placeholder="Link quảng cáo">
-                                                                                </div>
-                                                                                <!-- images -->
-                                                                                <div class="form-group">
-                                                                                    <label for="exampleInputPassword1">Images</label>
-                                                                                    <!-- <input type="file" onchange="onFileSelected()" class="image-preview-filepond" name="filepond" accept="image/png, image/jpeg, image/gif" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="3"> -->
-                                                                                    <input type="file" id="setimg" name="file_upload" class="form-control">
-                                                                                </div>
-                                                                                <!-- chọn chỗ để quảng cáo -->
-                                                                                <div class="form-group">
-                                                                                    <label for="">Chọn loại thông báo</label>
-                                                                                    <select class="form-control" name="id_hienthi" id="select-hienthi">
-                                                                                        <option value="" selected>- Chọn Loại Hiễn Thị -</option>
-                                                                                        <optgroup label="banner">
-                                                                                            <option value="1">Banner header</option>
-                                                                                            <option value="2">Banner Danh mục</option>
-                                                                                            <option value="3">Banner footer</option>
-                                                                                        </optgroup>
-                                                                                        <optgroup label="Thông báo">
-                                                                                            <option value="5">Khung thông báo (modal)</option>
-                                                                                        </optgroup>
-                                                                                    </select>
-                                                                                </div>
-                                                                                <!-- check hoạt động -->
-                                                                                <div class="form-check form-check-inline">
-                                                                                    <input class="form-check-input form-check-success" type="radio" name="trang_thai" id="inlineRadio1" value="1" checked>
-                                                                                    <label class="form-check-label" for="inlineRadio1">Bật trạng thái</label>
-                                                                                </div>
-                                                                                <div class="form-check form-check-inline">
-                                                                                    <input class="form-check-input form-check-danger" type="radio" name="trang_thai" id="inlineRadio2" value="2">
-                                                                                    <label class="form-check-label" for="inlineRadio2">Tắt trạng thái</label>
-                                                                                </div>
-                                                                                <div class="form-group mt-3">
-                                                                                    <button type="submit" class="btn btn-primary">Đăng quảng cáo</button>
-                                                                                </div>
-                                                                                <!-- submit -->
-                                                                            </div>
-
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- end trang chi tiết -->
-                                            <div class="tab-pane fade" id="list-video" role="tabpanel" aria-labelledby="list-video-list">
-                                                <div class="row">
-                                                    <div class="col-md-12" style=" border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <div class="" id="bannerheader">
-                                                                    <form action="{{route('postadsvideo')}}" method="POST" role="form" enctype="multipart/form-data">
-                                                                        @csrf
-                                                                        <div class="card card-body">
-                                                                            <div id="form-banner-trangchu-maytinh" class="col-md-12 mt-2">
-                                                                            <div class="divider">
-                                                                                <div class="divider-text"><h5>Quảng cáo cho trang xem video</h5></div>
-                                                                            </div>
-                                                                                <hr>
-
-                                                                                <!-- link -->
-                                                                                <div class="form-group mt-2">
-                                                                                    <label for="">Link quảng cáo</label>
-                                                                                    <input type="text" class="form-control" name="link" placeholder="Link quảng cáo">
-                                                                                </div>
-                                                                                <!-- images -->
-                                                                                <div class="form-group">
-                                                                                    <label for="exampleInputPassword1">Images</label>
-                                                                                    <!-- <input type="file" onchange="onFileSelected()" class="image-preview-filepond" name="filepond" accept="image/png, image/jpeg, image/gif" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="3"> -->
-                                                                                    <input type="file" id="setimg" name="file_upload" class="form-control">
-                                                                                </div>
-                                                                                <!-- chọn chỗ để quảng cáo -->
-                                                                                <div class="form-group">
-                                                                                    <label for="">Chọn loại thông báo</label>
-                                                                                    <select class="form-control" name="id_hienthi" id="select-hienthi">
-                                                                                        <option value="" selected>- Chọn Loại Hiễn Thị -</option>
-                                                                                        <optgroup label="banner">
-                                                                                            <option value="1">Banner header</option>
-                                                                                            <option value="2">Banner danh mục</option>
-                                                                                            <option value="3">Banner footer</option>
-                                                                                        </optgroup>
-                                                                                        <optgroup label="Thông báo">
-                                                                                            <option value="5">Khung thông báo (modal)</option>
-                                                                                        </optgroup>
-                                                                                    </select>
-                                                                                </div>
-                                                                                <!-- check hoạt động -->
-                                                                                <div class="form-check form-check-inline">
-                                                                                    <input class="form-check-input form-check-success" type="radio" name="trang_thai" id="inlineRadio1" value="1" checked>
-                                                                                    <label class="form-check-label" for="inlineRadio1">Bật trạng thái</label>
-                                                                                </div>
-                                                                                <div class="form-check form-check-inline">
-                                                                                    <input class="form-check-input form-check-danger" type="radio" name="trang_thai" id="inlineRadio2" value="2">
-                                                                                    <label class="form-check-label" for="inlineRadio2">Tắt trạng thái</label>
-                                                                                </div>
-                                                                                <div class="form-group mt-3">
-                                                                                    <button type="submit" class="btn btn-primary">Đăng quảng cáo</button>
-                                                                                </div>
-                                                                                <!-- submit -->
-                                                                            </div>
-
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- end trang video -->
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -443,11 +169,21 @@
             Swal.fire({
                 position: 'center-center',
                 icon: 'success',
-                title: 'Đã thêm thành công',
+                title: '{{session::get("success")}}',
                 showConfirmButton: true,
                 timer: 1500
             })
-    
+        </script>
+    @endif
+    @if(Session::has('error'))
+    <script>
+        Swal.fire({
+                position: 'center-center',
+                icon: 'success',
+                title: '{{session::get("error")}}',
+                showConfirmButton: true,
+                timer: 1500
+            })
         </script>
     @endif
 <script>
@@ -474,6 +210,10 @@
     jQuery(document).ready(function () {
         $(document).on('change', '#setimg', function(){
             onFileSelected();
+        })
+        var notImg = $('#clickNotImage').css('display', 'none');
+        $(document).on('change', '#select-hienthi', function(){
+            $(this).val() == 5 || $(this).val() == '' ? notImg.css('display', 'none'):notImg.css('display', 'block');
         })
     })
 </script>

@@ -72,11 +72,11 @@
                                       <div class="filter-box">
                                         <div class="filter-box-title">Số Lượng Tập</div>    
                                         <select class="form-control" id="tapphim" name="tapphim">
-                                            <option value="1">> 0 Tập </option>
-                                            <option value="10">>= 10 Tập</option>
-                                            <option value="50">>=50 Tập</option>
-                                            <option value="100">>= 100 Tập</option>
-                                            <option value="Full">Tập Full</option>
+                                            <option value="1" <?php echo e((isset($_GET['tapphim']) && $_GET['tapphim'] == 1) ? "selected":""); ?>>> 0 Tập </option>
+                                            <option value="10"<?php echo e((isset($_GET['tapphim']) && $_GET['tapphim'] == 10) ? "selected":""); ?>>>= 10 Tập</option>
+                                            <option value="50"<?php echo e((isset($_GET['tapphim']) && $_GET['tapphim'] == 50) ? "selected":""); ?>>>=50 Tập</option>
+                                            <option value="100"<?php echo e((isset($_GET['tapphim']) && $_GET['tapphim'] == 100) ? "selected":""); ?>>>= 100 Tập</option>
+                                            <option value="Full"<?php echo e((isset($_GET['tapphim']) && $_GET['tapphim'] == "Full") ? "selected":""); ?>>Tập Full</option>
                                         </select>                                   
                                       </div>
                                     </div>
@@ -86,7 +86,7 @@
                                         <div class="filter-box-title">Tình trạng</div>    
                                         <select class="form-control" id="status" name="status">
                                           <?php $__currentLoopData = $showtrangthai; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $showtt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($showtt->id); ?>"><?php echo e($showtt->name); ?></option>
+                                            <option value="<?php echo e($showtt->id); ?>" <?php echo e((isset($_GET['status']) && $_GET['status'] == $showtt->id) ? "selected":""); ?>><?php echo e($showtt->name); ?></option>
                                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </select>                                   
                                       </div>
@@ -115,7 +115,6 @@
           <?php endif; ?>
           <?php if(isset($data)): ?>
           <?php $__empty_1 = true; $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-            <?php if(isset($_GET['tapphim']) && $dt->showphimfirst->max('episode') >= $_GET['tapphim'] && $dt->showphimfirst->max('episode') != "Full"): ?>
               <article class="col-md-2 col-sm-2 col-xs-6 thumb grid-item post-6144">
                 <div class="halim-item">
                   <a class="halim-thumb" href="<?php echo e(route('chitiet', $dt->slug)); ?>" title="<?php echo e($dt->name); ?>">
@@ -143,35 +142,6 @@
                   </a>
                 </div>
               </article>
-            <?php elseif(isset($_GET['tapphim']) && $_GET['tapphim'] == "Full" && $dt->showphimfirst->max('episode') == "Full"): ?>
-            <article class="col-md-2 col-sm-2 col-xs-6 thumb grid-item post-6144">
-                <div class="halim-item">
-                  <a class="halim-thumb" href="<?php echo e(route('chitiet', $dt->slug)); ?>" title="<?php echo e($dt->name); ?>">
-                    <figure>
-                      <img class="lazy img-responsive" data-src="<?php echo e(asset('uploads')); ?>/<?php echo e($dt->image); ?>" alt="<?php echo e($dt->name); ?>" title="<?php echo e($dt->name2); ?>">
-                    </figure>
-                    <?php if($dt->phim_noibat == 1): ?>
-                      <span class="status">Hot</span>
-                      <?php elseif($dt->phim_noibat == 2): ?>
-                      <span class="status">Truyện mới</span>
-                      <?php elseif($dt->phim_noibat == 3): ?>
-                      <span class="status">Xem nhiều</span>
-                      <?php endif; ?>
-                      <span class="is_trailer"><?php echo e($dt->updated_at->diffForHumans()); ?></span>
-                      <?php if($dt->showphimfirst->max('episode')): ?>
-                      <span class="episode">Tập <?php echo e($dt->showphimfirst->max('episode')); ?></span>
-                      <?php endif; ?>
-                    <div class="icon_overlay"></div>
-                    <div class="halim-post-title-box">
-                      <div class="halim-post-title ">
-                        <h2 class="entry-title"><?php echo e($dt->name); ?></h2>
-                        <p class="original_title"><?php echo e($dt->name2); ?></p>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-              </article>
-            <?php endif; ?>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <div class="alert alert-dark" role="alert">
                 Hiện chưa có anime theo thể loại này trên kênh

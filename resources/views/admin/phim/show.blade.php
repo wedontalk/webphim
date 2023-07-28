@@ -127,8 +127,8 @@
     <section class="section">
         <div class="row" id="table-bordered">
             <div class="col-12">
-                @foreach($thongtin as $key => $dt )
                 <div class="card">
+                    @foreach($thongtin as $key => $dt )
                     <div class="card-header">
                         <div class="row d-flex">
                             <div class="col-md-4 col-12">
@@ -227,7 +227,11 @@
                                 </div>
                             </div>
                             <hr>
-                            <div class="row">
+                        </div>
+                    </div>
+                    @endforeach
+                    <div class="card-body">
+                        <div class="row">
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="row" style="padding: 5px 0px 5px 0px;">
@@ -237,10 +241,10 @@
                                             <div class="col-md-2 col-sm-5">
                                                 <div class="form-group">
                                                     <!-- <label for="exampleFormControlSelect1">Example select</label> -->
-                                                    <select class="form-control" >
-                                                        <option value="0">Lọc server anime</option>
+                                                    <select class="form-control" id="select_sv" name="selectsv">
+                                                        <option value="{{Request::url()}}">Lọc server anime</option>
                                                         @foreach($link_server as $sv)
-                                                            <option value="{{$sv->id}}">{{$sv->name_server}}</option>
+                                                            <option value="{{Request::url()}}?select_sv={{$sv->id}}">{{$sv->name_server}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -263,7 +267,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                @forelse($dt->tapphim as $showtap)
+                                                @forelse($tap_phim as $showtap)
                                                     <tr class="showhim">
                                                         <td ><input type="checkbox" class="checkboxclass" name="ids" value="{{$showtap->id}}"></td>
                                                         <td>{{$dt->name}}</td>
@@ -278,9 +282,13 @@
                                                         </td>
                                                     </tr>
                                                 @empty
-                                                <div class="alert alert-danger" role="alert">
-                                                    chưa có tập phim nào
-                                                </div>
+                                                <tr>
+                                                    <td colspan="6">
+                                                        <div class="alert alert-danger" role="alert">
+                                                            chưa có tập phim nào
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                                 @endforelse
                                                 </tbody>
                                             </table>
@@ -292,10 +300,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </div>
-                @endforeach
             </div>
         </div>
     </section>
@@ -845,7 +851,7 @@
 </script>
 <!-- script tìm anime nhanh -->
 <script>
-
+    // callback delay
     function delay(callback, ms) {
         var timer = 0;
         return function() {
@@ -856,7 +862,7 @@
             }, ms || 0);
         };
     }
-
+ // tìm kiếm
     $(document).ready(function(){
         $('#search').keyup(delay(function (e){
         $('#result').html('');
@@ -878,13 +884,22 @@
             $('#result').css('display','none')
         }
         }, 700))
-
-
     });
-</script>
-<script>
-// Simple Datatable
-    let table1 = document.querySelector('#myTable');
-    let dataTable = new simpleDatatables.DataTable(table1);
+    // select server
+    jQuery(document).ready(function($) {
+        $('#select_sv').change(function(e){
+            var id_server = $(this).val();
+            // alert(id_server);
+            if(id_server){
+                window.location = id_server;
+            }
+            return false;
+        });
+        locdanhsach();
+        function locdanhsach() {
+            var id_server = window.location.href;
+            $('select[id="select_sv"]').find('option[value="'+id_server+'"]').attr("selected",true);
+        }
+    });
 </script>
 @stop()

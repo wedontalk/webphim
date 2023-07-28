@@ -105,7 +105,6 @@
                                         <a href="<?php echo e(route('phim.edit',$dt->id)); ?>" class="btn btn-outline-primary">sửa</a>
                                         <a href="<?php echo e(route('phim.destroy',$dt->id)); ?>" class="btn btn-outline-danger btndelete">xóa</a>
                                         </td>
-
                                     </tr>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </tbody>

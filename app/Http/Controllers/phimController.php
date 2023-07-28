@@ -114,11 +114,22 @@ class phimController extends Controller
         $phimtheloaine = $phim->nhieutheloai;
         $cats = danhmuc::orderBy('id', 'desc')->get();
         $link_server = server::orderBy('id', 'ASC')->get();
-        $tap_phim = tapphim::with('phim')->orderBy('id','desc')->where('film_id', $phim)->get();
+        $tap_phim = tapphim::with('phim')->orderBy('episode','asc')->where('film_id', $phim->id)->get();
         $thongtin_first = phim::where('id', $phim->id)->first();
         $thongtin = phim::with('cat','nhieutheloai','tapphim')->where('id', $phim->id)->get();
         $kieuphim = kieuphim::orderBy('id', 'ASC')->select('id','name')->get();
         $trangthai = trangthai::orderBy('id', 'ASC')->select('id','name')->get();
+
+        foreach ($tap_phim as $key => $val) {
+            if(isset($_GET['select_sv'])){
+                $sort_by = $_GET['select_sv'];
+                if($sort_by == $val->id_server){
+                    $tap_phim = tapphim::with('phim')->orderBy('episode','asc')->where('film_id', $phim->id)->where('id_server', $sort_by)->get();
+                }else{
+                    $tap_phim = tapphim::with('phim')->orderBy('episode','asc')->where('film_id', $phim->id)->where('id_server', $sort_by)->get();
+                }
+            }
+        }
         return view('admin.phim.show', compact('thongtin','tap_phim','phimtheloaine','kieuphim','thongtin_first','cats','trangthai','baoloi_failer','link_server'));
     }
 

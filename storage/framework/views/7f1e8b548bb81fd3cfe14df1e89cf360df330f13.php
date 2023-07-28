@@ -20,8 +20,14 @@
     <meta name="msnbot" content="index,follow" />
     <meta name="revisit-after" content="1 days">
     <title><?php echo e($meta_title); ?> <?php echo e($showphimtap->episode_name); ?> | animetvh.net</title>
-    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
 <?php $__env->startSection('css'); ?>
+
+    <style>
+        .activeline{
+            background-color: #45ab88 ;
+        }
+    </style>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('main'); ?>
 <div class="container">
@@ -61,7 +67,11 @@
                     </span>
                     <hr>
                     <div class="clearfix"></div>
-
+                    <div class="col-12" style="display:block;text-align:center">
+                    <?php $__currentLoopData = $showtapphimtheoserver; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $show_server): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <a data-href="<?php echo e($show_server->content); ?>" data-svid="<?php echo e($show_server->id_server); ?>" class="btn btn-info btn-server"><?php echo e($show_server->funcserver->name_server); ?></a>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
                     <hr>
                     <div id="halim-player-wrapper" class="ajax-player-loading">
                         <!-- show phim -->
@@ -213,9 +223,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"></script>
-<!-- <script>
+<script>
 jQuery(document).ready(function($) {
-        runwatchtv();
     function runwatchtv(){
         $(".ajax-player-loading").append('<div id="halim-player-loader"></div>');
         setTimeout(function(){
@@ -223,8 +232,33 @@ jQuery(document).ready(function($) {
             $("#halim-player-loader").hide();
         },1000);
     }
+    var dataSV = $('.btn-server').map(function() {
+        var showdata = $(this).data('href');
+        // show server
+        $(this).click(function(){
+            var playerHalim = $('#halim-player-wrapper').empty();
+            runwatchtv();
+            playerHalim.append('<iframe src="'+showdata+'" frameborder="0" width="100%" height="100%" allowfullscreen></iframe>')
+            $('.btn-server').removeClass('activeline');
+            $(this).addClass('activeline');
+        });
+        // load server
+        $('#halim-player-wrapper iframe').on('load', function() {
+            var iframeSrc = $(this).attr('src');
+            $('.btn-server').removeClass('activeline');
+            $('.btn-server[data-href="' + iframeSrc + '"]').addClass('activeline');
+        });
+        // click server
+        $('body').on('click', '#halim-player-wrapper iframe', function() {
+            var iframeSrc = $(this).attr('src');
+            $('.btn-server').removeClass('activeline');
+            $('.btn-server[data-href="' + iframeSrc + '"]').addClass('activeline');
+        });
+        
+    }).get();
+
 });
-</script> -->
+</script>
 <script>
 jQuery(document).ready(function($) {
     $(document).on('click','#btnbaoloi', function(e){

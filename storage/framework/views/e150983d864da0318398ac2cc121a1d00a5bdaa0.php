@@ -77,7 +77,6 @@
                 <li class="bookmark-list"><a href="<?php echo e(route('admin.dashboard')); ?>" style="color:#db7b17">truy cập quản trị</a></li>
                 <li class="bookmark-list"><a href="<?php echo e(route('thongtincanhan')); ?>" style="color:#db7b17">Thông tin cá nhân</a></li>
                 <li class="bookmark-list"><a href="<?php echo e(route('animedaluu')); ?>" style="color:#db7b17">Anime đã lưu</a></li>
-                <li class="bookmark-list"><a href="" style="color:#db7b17">Lịch sử đã xem</a></li>
                 <li class="bookmark-list"><a href="<?php echo e(route('logout')); ?>" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng xuất</a></li>
                 <form action="<?php echo e(route('logout')); ?>" method="post" id="logout-form" style="display:none">
                     <?php echo csrf_field(); ?>
@@ -102,7 +101,6 @@
               <ul class="halim-bookmark-lists">
                 <li class="bookmark-list"><a href="<?php echo e(route('thongtincanhan')); ?>" style="color:#db7b17">Thông tin cá nhân</a></li>
                 <li class="bookmark-list"><a href="<?php echo e(route('animedaluu')); ?>" style="color:#db7b17">Anime đã lưu</a></li>
-                <li class="bookmark-list"><a href="" style="color:#db7b17">Lịch sử đã xem</a></li>
                 <li class="bookmark-list"><a href="<?php echo e(route('logout')); ?>" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng xuất</a></li>
                 <form action="<?php echo e(route('logout')); ?>" method="post" id="logout-form" style="display:none">
                     <?php echo csrf_field(); ?>
@@ -136,19 +134,64 @@
 <br>
 <div class="container">
   <div class="row">
-    <div class="col-12" style="text-align: center"></div>
+    <div class="col-12">
+      <div class="alert alert-info" role="alert">
+      <?php $__currentLoopData = $thongbaouser; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tb): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <?php echo $tb->text_thongbao; ?>
+
+      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+      </div>
+    </div>
     <?php echo $__env->make('user.slide', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <!-- banner header -->
+    <?php if(isset($qc_header)): ?>
+    <div class="col-12" style="display:flex; justify-content:center">
+      <a href="">
+        <img src="<?php echo e(asset('uploads/quangcao')); ?>/<?php echo e($qc_header->images); ?>" alt="">
+      </a>
+    </div>
+    <?php endif; ?>
     <!-- end banner header -->
     <?php echo $__env->yieldContent('main'); ?>
+    <?php if(isset($qc_footer)): ?>
+    <!-- banner footer -->
+    <div class="col-12" style="display:flex; justify-content:center">
+      <a href="">
+        <img src="<?php echo e(asset('uploads/quangcao')); ?>/<?php echo e($qc_footer->images); ?>" alt="">
+      </a>
+    </div>
+    <!-- end banner footer -->
+   <?php endif; ?>
   <div class="clearfix"></div>
-  
+  <?php if(isset($qc_modal)): ?>
+    <div class="modal fade in" id="banner_qc" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <!-- <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5> -->
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true" style="font-size: 30px;">&times;</span>
+            </button>
+          </div>
+          <a class="click_close" data-href="<?php echo e($qc_modal->link); ?>">
+          <div class="modal-body">
+              <img src="<?php echo e(asset('uploads/quangcao')); ?>/<?php echo e($qc_modal->images); ?>" alt="" width="100%">
+          </div>
+          </a>
+          <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  <?php endif; ?>
   <footer id="footer" class="clearfix">
     <div class="container footer-columns">
       <div class="row container">
         <div class="widget about col-xs-12 col-sm-4 col-md-4">
           <div class="footer-logo">
-            <img class="img-responsive" src="<?php foreach($showcauhinh as $key => $avatar) {echo'../../uploads/logo/'.$avatar->logo_footer;} ?>" alt="AnimeHot.XYZ" width="420px" height="200px"/>
+            <img class="img-responsive" src="<?php foreach($showcauhinh as $key => $avatar) {echo'../../uploads/logo/'.$avatar->logo_footer;} ?>" alt="<?php echo e($avatar->logo_footer); ?>" width="420px" height="200px"/>
             <span class="social"></span>
           </div>
           <p class="halim-about">
@@ -166,11 +209,14 @@
       <div class="container credit">
         <div class="row container">
           <div class="col-xs-12 col-sm-4 col-md-6">Copyright  ©  
-            <a id="halimthemes" href="route('home.index')" title="mangatv">kenhanime.pro</a>
+            <a id="halimthemes" href="route('home.index')" title="mangatv">animetvh.com</a>
           </div>
           <div class="col-xs-12 col-sm-4 col-md-6 text-right pull-right">
-            <p class="blog-info">kenhanime.pro</p>
+            <p class="blog-info">animetvh.com</p>
           </div>
+          <?php if(isset($qc_onclick)): ?>
+            <input id="id_click" type="hidden" value="<?php echo e($qc_onclick->link); ?>">
+          <?php endif; ?>
         </div>
       </div>
     </div>
@@ -227,10 +273,31 @@
       </script>
       <script>
             $(document).ready(function(){
-                $(window).on('load', function () {
-                    $('#banner_qc').modal('show');
+                function displayModal() {
+                  $('#banner_qc').modal('show');
+                }
+                var clickclose = $('.close');
+                clickclose.on("click", function() {
+                  closeModal();
                 });
-            });
+                var span = $(".click_close");
+                span.on("click", function() {
+                  closeModal();
+                });
+                function closeModal() {
+                  var $link = span.data('href');
+                  sessionStorage.setItem("modalVisible", "hidden");
+                  window.open($link);
+                  window.location.reload(true)
+                }
+                $(window).on('load', function () {
+                var modalVisible = sessionStorage.getItem("modalVisible");
+                  if (modalVisible !== "hidden") {
+                    // displayModal();
+                    displayModal();
+                  }
+                });
+              });
       </script>
       <!-- <script>
         $(document).keydown(function (event) {
@@ -277,5 +344,19 @@
         }
         });
       </script> -->
+      <script>
+            $(document).ready(function(){
+              $(window).on('load', function (){
+                var clickItem = sessionStorage.getItem('clickItem');
+                var url = $('#id_click').val();
+                if(clickItem !== "true"){
+                  $(document).on('click','.halim-episode', function(){
+                   sessionStorage.setItem("clickItem", "true");
+                   window.open(url);
+                  })
+                }
+              })
+            });
+      </script>
 </body>
 </html><?php /**PATH C:\xampp\htdocs\webphim\resources\views/layouts/user.blade.php ENDPATH**/ ?>

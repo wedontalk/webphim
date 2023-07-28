@@ -72,11 +72,11 @@
                                       <div class="filter-box">
                                         <div class="filter-box-title">Số Lượng Tập</div>    
                                         <select class="form-control" id="tapphim" name="tapphim">
-                                            <option value="1">> 0 Tập </option>
-                                            <option value="10">>= 10 Tập</option>
-                                            <option value="50">>=50 Tập</option>
-                                            <option value="100">>= 100 Tập</option>
-                                            <option value="Full">Tập Full</option>
+                                            <option value="1" {{(isset($_GET['tapphim']) && $_GET['tapphim'] == 1) ? "selected":""}}>> 0 Tập </option>
+                                            <option value="10"{{(isset($_GET['tapphim']) && $_GET['tapphim'] == 10) ? "selected":""}}>>= 10 Tập</option>
+                                            <option value="50"{{(isset($_GET['tapphim']) && $_GET['tapphim'] == 50) ? "selected":""}}>>=50 Tập</option>
+                                            <option value="100"{{(isset($_GET['tapphim']) && $_GET['tapphim'] == 100) ? "selected":""}}>>= 100 Tập</option>
+                                            <option value="Full"{{(isset($_GET['tapphim']) && $_GET['tapphim'] == "Full") ? "selected":""}}>Tập Full</option>
                                         </select>                                   
                                       </div>
                                     </div>
@@ -86,7 +86,7 @@
                                         <div class="filter-box-title">Tình trạng</div>    
                                         <select class="form-control" id="status" name="status">
                                           @foreach($showtrangthai as $key => $showtt)
-                                            <option value="{{$showtt->id}}">{{$showtt->name}}</option>
+                                            <option value="{{$showtt->id}}" {{(isset($_GET['status']) && $_GET['status'] == $showtt->id) ? "selected":""}}>{{$showtt->name}}</option>
                                           @endforeach
                                         </select>                                   
                                       </div>
@@ -115,7 +115,6 @@
           @endif
           @if(isset($data))
           @forelse($data as $dt)
-            @if(isset($_GET['tapphim']) && $dt->showphimfirst->max('episode') >= $_GET['tapphim'] && $dt->showphimfirst->max('episode') != "Full")
               <article class="col-md-2 col-sm-2 col-xs-6 thumb grid-item post-6144">
                 <div class="halim-item">
                   <a class="halim-thumb" href="{{route('chitiet', $dt->slug)}}" title="{{$dt->name}}">
@@ -143,35 +142,6 @@
                   </a>
                 </div>
               </article>
-            @elseif(isset($_GET['tapphim']) && $_GET['tapphim'] == "Full" && $dt->showphimfirst->max('episode') == "Full")
-            <article class="col-md-2 col-sm-2 col-xs-6 thumb grid-item post-6144">
-                <div class="halim-item">
-                  <a class="halim-thumb" href="{{route('chitiet', $dt->slug)}}" title="{{$dt->name}}">
-                    <figure>
-                      <img class="lazy img-responsive" data-src="{{asset('uploads')}}/{{$dt->image}}" alt="{{$dt->name}}" title="{{$dt->name2}}">
-                    </figure>
-                    @if($dt->phim_noibat == 1)
-                      <span class="status">Hot</span>
-                      @elseif($dt->phim_noibat == 2)
-                      <span class="status">Truyện mới</span>
-                      @elseif($dt->phim_noibat == 3)
-                      <span class="status">Xem nhiều</span>
-                      @endif
-                      <span class="is_trailer">{{$dt->updated_at->diffForHumans()}}</span>
-                      @if($dt->showphimfirst->max('episode'))
-                      <span class="episode">Tập {{$dt->showphimfirst->max('episode')}}</span>
-                      @endif
-                    <div class="icon_overlay"></div>
-                    <div class="halim-post-title-box">
-                      <div class="halim-post-title ">
-                        <h2 class="entry-title">{{$dt->name}}</h2>
-                        <p class="original_title">{{$dt->name2}}</p>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-              </article>
-            @endif
             @empty
             <div class="alert alert-dark" role="alert">
                 Hiện chưa có anime theo thể loại này trên kênh

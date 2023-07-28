@@ -56,11 +56,7 @@ Route::group(['prefix' => 'admintrator','middleware'=>['checkAdmin','auth']], fu
     Route::put('post-seo-search', [App\Http\Controllers\metaallController::class, 'postseosearch'])->name('postseosearch');
     Route::put('post-seo-timanime', [App\Http\Controllers\metaallController::class, 'postseotimanime'])->name('postseotimanime');
     // quản lý quảng cáo
-    Route::post('post-quangcao-home', [App\Http\Controllers\quangcaoController::class, 'postadshome'])->name('postadshome');
     Route::post('post-quangcao-danhmuc', [App\Http\Controllers\quangcaoController::class, 'postadsdanhmuc'])->name('postadsdanhmuc');
-    Route::post('post-quangcao-timkiem', [App\Http\Controllers\quangcaoController::class, 'postadstimkiem'])->name('postadstimkiem');
-    Route::post('post-quangcao-chitiet', [App\Http\Controllers\quangcaoController::class, 'postadschitiet'])->name('postadschitiet');
-    Route::post('post-quangcao-video', [App\Http\Controllers\quangcaoController::class, 'postadsvideo'])->name('postadsvideo');
     // post thông báo từ admin
     Route::put('post-thongbao-admin', [App\Http\Controllers\metaallController::class, 'postthongbao'])->name('postthongbao');
     // đổi trạng thái quảng cáo
@@ -102,7 +98,12 @@ Route::get('search',[
 ]);
 Route::get('/xem-phim/{slug}', [App\Http\Controllers\HomeController::class, 'xemphim'])->name('xemphim');
 Route::post('/bao-loi-tap-phim', [App\Http\Controllers\HomeController::class, 'baoloitapphim'])->name('baoloitapphim');
-
+// login google
+Route::get('auth/google', [App\Http\Controllers\LoginGoogleController::class, 'redirectToGoogle'])->name('login-google');
+Route::get('auth/google/callback', [App\Http\Controllers\LoginGoogleController::class, 'handleGoogleCallback']);
+// login facebook
+Route::get('auth/facebook', [App\Http\Controllers\LoginFacebookController::class, 'redirectToFacebook'])->name('login-facebook');
+Route::get('auth/facebook/callback', [App\Http\Controllers\LoginFacebookController::class, 'handleFacebookCallback']);
 
 // sitemap
 Route::get('genrate-sitemap', function(){

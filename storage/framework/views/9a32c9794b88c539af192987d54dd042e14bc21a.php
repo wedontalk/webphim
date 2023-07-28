@@ -164,7 +164,6 @@
                 <li class="bookmark-list"><a href="<?php echo e(route('admin.dashboard')); ?>" style="color:#db7b17">truy cập quản trị</a></li>
                 <li class="bookmark-list"><a href="<?php echo e(route('thongtincanhan')); ?>" style="color:#db7b17">Thông tin cá nhân</a></li>
                 <li class="bookmark-list"><a href="<?php echo e(route('animedaluu')); ?>" style="color:#db7b17">Anime đã lưu</a></li>
-                <li class="bookmark-list"><a href="" style="color:#db7b17">Lịch sử đã xem</a></li>
                 <li class="bookmark-list"><a href="<?php echo e(route('logout')); ?>" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng xuất</a></li>
                 <form action="<?php echo e(route('logout')); ?>" method="post" id="logout-form" style="display:none">
                     <?php echo csrf_field(); ?>
@@ -189,7 +188,6 @@
               <ul class="halim-bookmark-lists">
                 <li class="bookmark-list"><a href="<?php echo e(route('thongtincanhan')); ?>" style="color:#db7b17">Thông tin cá nhân</a></li>
                 <li class="bookmark-list"><a href="<?php echo e(route('animedaluu')); ?>" style="color:#db7b17">Anime đã lưu</a></li>
-                <li class="bookmark-list"><a href="" style="color:#db7b17">Lịch sử đã xem</a></li>
                 <li class="bookmark-list"><a href="<?php echo e(route('logout')); ?>" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng xuất</a></li>
                 <form action="<?php echo e(route('logout')); ?>" method="post" id="logout-form" style="display:none">
                     <?php echo csrf_field(); ?>
@@ -241,10 +239,8 @@
                     <ul class="list-group">
                         <li class="list-group-item"><a href="" class="active">Thông Tin chung</a></li>
                         <li class="list-group-item"><a href="<?php echo e(route('animedaluu')); ?>">Anime đã lưu</a></li>
-                        <li class="list-group-item"><a href="">Lịch sử xem anime</a></li>
-                        <li class="list-group-item"><a href="">Đổi Thông tin</a></li>
                         <li class="list-group-item"><a href="">Đổi mật khẩu</a></li>
-                        <li class="list-group-item"><a href="">Đăng xuất</a></li>
+                        <li class="list-group-item"><a href="<?php echo e(route('logout')); ?>" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng xuất</a></li>
                     </ul>
                 </div>
             </div>
@@ -398,7 +394,7 @@
                         <div class="card-body">
                           <h5 class="card-title" style="height:30px" title="${item.name}">${item.name.substring(0,40)}...</h5>
                           <a href="/chi-tiet-anime/${item.slug}" class="btn btn-primary">Xem ngay</a>
-                          <button id="deletebtn" data-btn="${item.id}" class="btn btn-danger">Xóa</button>
+                          <button id="deletebtn" onclick="removeItem(${item.id})" class="btn btn-danger">Xóa</button>
                         </div>
                       </div>
                     </div>`;
@@ -406,14 +402,11 @@
                     $('#show-luu').html(content);
                   data.links.map((item, index) => {
                       if (item.label == '&laquo; Previous') {
-                          pagination +=
-                              `<li data-page=${item.url != null ? item.url.slice(-1): ""}><a class="Previous"><i class="hl-down-open rotate-left"></i></a></li>`
+                          pagination +=`<li data-page="${item.url != null ? item.url.slice(-1): ""}"><a class="Previous"><i class="hl-down-open rotate-left"></i></a></li>`
                       } else if (item.label == 'Next &raquo;') {
-                          pagination +=
-                              `<li data-page=${item.url != null ? item.url.slice(-1): ""}><a class="Next"><i class="hl-down-open rotate-right"></i></a></li>`
+                          pagination +=`<li data-page="${item.url != null ? item.url.slice(-1): ""}"><a class="Next"><i class="hl-down-open rotate-right"></i></a></li>`
                       } else {
-                          pagination +=
-                              `<li data-page=${item.url.slice(-1)} class="${item.active ? 'active' : ''}"><a>${item.label}</a></li>`
+                          pagination +=`<li data-page=${item.url.slice(-1)} class="${item.active ? 'active' : ''}"><a>${item.label}</a></li>`
                       }
                   })
                     $('.pagination-box').html(pagination);
@@ -428,65 +421,18 @@
                 
            });
           }
-          loadBlog(1);
+          loadBlog();
           });
           
       </script>
       <!-- delete luu anime -->
       <script>
-        $(document).ready(function(){
-          $(document).on('click', '#deletebtn', function(event){
-              var btndelete = $(this).data('btn');
-              var retrievedObject = localStorage.getItem('bookmark-list');
-              review = JSON.parse(retrievedObject);
-            if(review.length > 1){
-              if(review){
-                  for (var i = 0; i < review.length; ++i) {
-                    const element = review[i];
-                    if(element === btndelete) {
-                      review.splice(i,i);
-                    }
-                }
-                localStorage.setItem('bookmark-list',JSON.stringify(review));
-              }
-            }
-            if(review.length==1){
-              for(var i = 0; i < review.length; i++) {
-                if(review[i] === btndelete) {
-                  review.splice(i,1);
-                  console.log(review.splice(i,1));
-                }
-              }
-              localStorage.setItem('bookmark-list',JSON.stringify(review));
-            }else{
-              for(var i = 0; i < review.length; i++) {
-                if(review[i] === btndelete) {
-                  review.splice(i,1);
-                  console.log(review.splice(i,i));
-                }
-              }
-              localStorage.setItem('bookmark-list',JSON.stringify(review));
-            }
-            if(review.length < 1){
-              localStorage.removeItem('bookmark-list');
-            }
-            window.location.reload(true);
-            // alert(btndelete);
-            // localStorage.removeItem('bookmark-list')
-            // console.log(localStorage.removeItem('bookmark-list')[btndelete]);
-          })
-        })
-        // const onRemove = (id) => {
-        //       var retrievedObject = localStorage.getItem('bookmark-list');
-        //       review = JSON.parse(retrievedObject);
-        //       console.log(id);
-        //       let index = review.findIndex(item => item.id !== id)
-        //       review.splice(index, 1);
-        //       localStorage.setItem('bookmark-list', JSON.stringify(review));
-        //       // if(review == ""){
-        //       //   localStorage.removeItem('bookmark-list');
-        //       // }
-        //   };
+        function removeItem(id){
+          let devicesArray = JSON.parse(localStorage.getItem("bookmark-list"))
+          devicesArray.splice(devicesArray.indexOf(id), 1)
+          localStorage.setItem("bookmark-list", JSON.stringify(devicesArray));
+          location.reload(true);
+        }
       </script>
 </body>
 </html><?php /**PATH C:\xampp\htdocs\webphim\resources\views/user/luuanime.blade.php ENDPATH**/ ?>

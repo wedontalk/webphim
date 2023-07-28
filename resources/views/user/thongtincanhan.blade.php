@@ -219,9 +219,8 @@
                 </div>
                 <div class="col-md-12">
                     <ul class="list-group">
-                        <li class="list-group-item"><a href="" class="active">Thông Tin chung</a></li>
+                        <li class="list-group-item"><a href="{{route('thongtincanhan')}}" class="active">Thông Tin chung</a></li>
                         <li class="list-group-item"><a href="{{route('animedaluu')}}">Anime đã lưu</a></li>
-                        <li class="list-group-item"><a href="">Lịch sử xem anime</a></li>
                         <li class="list-group-item"><a href="">Đổi Thông tin</a></li>
                         <li class="list-group-item"><a href="">Đổi mật khẩu</a></li>
                         <li class="list-group-item"><a href="">Đăng xuất</a></li>
@@ -231,12 +230,12 @@
             <div class="col-lg-8 col-12">
                 <div class="col-md-12 col-12 box-tutien">
                     <h4><center>- Thông tin chung -</center></h4>
-                    <p>Trạng thái tu tiên</p>
+                    <!-- <p>Trạng thái tu tiên</p>
                     <span class="level level-current">Luyện khí</span>
                     <span class="level level-next">Tụ đan</span>
                     <div class="progress">
                         <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
+                    </div> -->
                     <div class="group-info">
                         <div class="label">
                             Họ và Tên :
@@ -249,12 +248,12 @@
                         </div>
                         <div class="detail">{{Auth::user()->email}}</div>
                     </div>
-                    <div class="group-info">
+                    <!-- <div class="group-info">
                         <div class="label">
                             Loại Hệ Thống :
                         </div>
                         <div class="detail">Tu tiên</div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-md-12 mt-3">
                 <h4><center>- Thông báo Từ Admin -</center></h4>

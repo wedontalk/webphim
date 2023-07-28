@@ -114,7 +114,7 @@
     </div>
     <!-- end banner footer -->
   <?php endif; ?>
-  <?php if(isset($check_quangcao)): ?>
+  <?php if(isset($qc_modal)): ?>
     <div class="modal fade" id="banner_qc" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -124,9 +124,9 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <a href="<?php echo e($check_quangcao->link); ?>">
+          <a href="<?php echo e($qc_modal->link); ?>">
           <div class="modal-body">
-              <img src="<?php echo e(asset('uploads/quangcao')); ?>/<?php echo e($check_quangcao->images); ?>" alt="" width="100%">
+              <img src="<?php echo e(asset('uploads/quangcao')); ?>/<?php echo e($qc_modal->images); ?>" alt="" width="100%">
           </div>
           </a>
           <!-- <div class="modal-footer">

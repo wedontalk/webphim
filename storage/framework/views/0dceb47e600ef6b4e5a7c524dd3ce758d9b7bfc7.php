@@ -127,8 +127,8 @@
     <section class="section">
         <div class="row" id="table-bordered">
             <div class="col-12">
-                <?php $__currentLoopData = $thongtin; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $dt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="card">
+                    <?php $__currentLoopData = $thongtin; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $dt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="card-header">
                         <div class="row d-flex">
                             <div class="col-md-4 col-12">
@@ -228,7 +228,11 @@
                                 </div>
                             </div>
                             <hr>
-                            <div class="row">
+                        </div>
+                    </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <div class="card-body">
+                        <div class="row">
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="row" style="padding: 5px 0px 5px 0px;">
@@ -238,10 +242,10 @@
                                             <div class="col-md-2 col-sm-5">
                                                 <div class="form-group">
                                                     <!-- <label for="exampleFormControlSelect1">Example select</label> -->
-                                                    <select class="form-control" >
-                                                        <option value="0">Lọc server anime</option>
+                                                    <select class="form-control" id="select_sv" name="selectsv">
+                                                        <option value="<?php echo e(Request::url()); ?>">Lọc server anime</option>
                                                         <?php $__currentLoopData = $link_server; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sv): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e($sv->id); ?>"><?php echo e($sv->name_server); ?></option>
+                                                            <option value="<?php echo e(Request::url()); ?>?select_sv=<?php echo e($sv->id); ?>"><?php echo e($sv->name_server); ?></option>
                                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </select>
                                                 </div>
@@ -264,7 +268,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                <?php $__empty_1 = true; $__currentLoopData = $dt->tapphim; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $showtap): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                                <?php $__empty_1 = true; $__currentLoopData = $tap_phim; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $showtap): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                                     <tr class="showhim">
                                                         <td ><input type="checkbox" class="checkboxclass" name="ids" value="<?php echo e($showtap->id); ?>"></td>
                                                         <td><?php echo e($dt->name); ?></td>
@@ -279,9 +283,13 @@
                                                         </td>
                                                     </tr>
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                                <div class="alert alert-danger" role="alert">
-                                                    chưa có tập phim nào
-                                                </div>
+                                                <tr>
+                                                    <td colspan="6">
+                                                        <div class="alert alert-danger" role="alert">
+                                                            chưa có tập phim nào
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                                 <?php endif; ?>
                                                 </tbody>
                                             </table>
@@ -293,10 +301,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </div>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
     </section>
@@ -899,7 +905,7 @@ unset($__errorArgs, $__bag); ?>
 </script>
 <!-- script tìm anime nhanh -->
 <script>
-
+    // callback delay
     function delay(callback, ms) {
         var timer = 0;
         return function() {
@@ -910,7 +916,7 @@ unset($__errorArgs, $__bag); ?>
             }, ms || 0);
         };
     }
-
+ // tìm kiếm
     $(document).ready(function(){
         $('#search').keyup(delay(function (e){
         $('#result').html('');
@@ -932,14 +938,23 @@ unset($__errorArgs, $__bag); ?>
             $('#result').css('display','none')
         }
         }, 700))
-
-
     });
-</script>
-<script>
-// Simple Datatable
-    let table1 = document.querySelector('#myTable');
-    let dataTable = new simpleDatatables.DataTable(table1);
+    // select server
+    jQuery(document).ready(function($) {
+        $('#select_sv').change(function(e){
+            var id_server = $(this).val();
+            // alert(id_server);
+            if(id_server){
+                window.location = id_server;
+            }
+            return false;
+        });
+        locdanhsach();
+        function locdanhsach() {
+            var id_server = window.location.href;
+            $('select[id="select_sv"]').find('option[value="'+id_server+'"]').attr("selected",true);
+        }
+    });
 </script>
 <?php $__env->stopSection(); ?>
 

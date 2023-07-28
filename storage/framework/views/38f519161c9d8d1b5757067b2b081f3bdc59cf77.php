@@ -1,9 +1,11 @@
 <aside id="sidebar" class="col-xs-12 col-sm-12 col-md-4">
+<?php if(isset($qc_right)): ?>
   <div class="col-12" style="display:flex; justify-content:center">
     <a href="">
-      <img src="<?php echo e(asset('wp-content/uploads/banner_theloai.png')); ?>" alt="">
+      <img src="<?php echo e(asset('uploads/quangcao')); ?>/<?php echo e($qc_right->images); ?>" alt="<?php echo e($qc_right->images); ?>">
     </a>
   </div>
+<?php endif; ?>
   <div id="nav_menu-2" class="widget widget_nav_menu">
     <h4 class="widget-title">Thể Loại</h4>
     <div class="menu-the-loai-container">

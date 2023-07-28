@@ -9,6 +9,6 @@ class traffic extends Model
 {
     use HasFactory;
     protected $table = 'traffic';
-    protected $fillable = ['id','ip_address','date_traffic'];
+    protected $fillable = ['id','ip_address','date_traffic','advertise_ment'];
     public $timestamps = FALSE;
 }

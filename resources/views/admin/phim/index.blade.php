@@ -106,7 +106,6 @@
                                         <a href="{{route('phim.edit',$dt->id)}}" class="btn btn-outline-primary">sửa</a>
                                         <a href="{{route('phim.destroy',$dt->id)}}" class="btn btn-outline-danger btndelete">xóa</a>
                                         </td>
-
                                     </tr>
                                     @endforeach
                                 </tbody>
