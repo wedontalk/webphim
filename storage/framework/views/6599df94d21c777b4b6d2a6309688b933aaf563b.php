@@ -24,6 +24,42 @@
 <?php $__env->startSection('css'); ?>
 <link rel='stylesheet' id='bootstrap-css'  href='<?php echo e(asset("wp-content/themes/halimmovies/assets/css/bootstrap.min.css")); ?>' media='all' />
 <link rel='stylesheet' id='style-css'  href='<?php echo e(asset("wp-content/themes/halimmovies/style1.css")); ?>' media='all' />
+
+<style>
+  .media{
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
+      align-items: flex-start;
+  }
+  .media .media-body{
+      /* border:1px solid; */
+      -webkit-box-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+  }
+  .media .media-left img{
+      padding-right: 10px;
+  }
+  .comment_form{
+      display:flex;
+      -webkit-box-pack:justify;
+      justify-content:space-between;
+  }
+  .comment_form button{
+      margin-top:3px;
+  }
+  #halim-list-server{
+    overflow: auto;
+    width: 100%;
+    max-height: 300px;
+  }
+  .luu span{
+    background-color:#737373 !important;
+  }
+</style>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('main'); ?>
 <div class="container">
@@ -121,7 +157,7 @@
                   <ul class="halim-list-eps">
                     <?php $__currentLoopData = $showtapphim; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $showtap): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <li class="halim-episode">
-                          <a href="<?php echo e(route('xemphim', $showtap->slug_phim)); ?>"><span><?php echo e($showtap->episode_name); ?></span></a>
+                          <a href="<?php echo e(route('xemphim', $showtap->slug_phim)); ?>" data-ep="<?php echo e($showtap->id); ?>" data-film="<?php echo e($showtap->film_id); ?>"><span><?php echo e($showtap->episode_name); ?></span></a>
                         </li>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                   </ul>
@@ -144,14 +180,57 @@
             </div>
         </section>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        <?php
-          $current_url = Request::url();
-        ?>
-        <div class="fb-comments" data-href="<?php echo e($current_url); ?>" data-width="100%" data-numposts="3"></div>
+        <!-- danh sách comment -->
+          <section class="related-movies">
+            <div class="section-heading">
+                <a title="Bình Luận - <?php echo e($thongt->name); ?>">
+                    <span class="h-text">Bình Luận</span>
+                </a>
+            </div>
+            <div id="comment_load" class="col-md-12" style="background:#fff;border-radius:5px;padding:10px">
+                <?php $__empty_1 = true; $__currentLoopData = $select_comment; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $comment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <div class="media col-md-12">
+                    <div class="media-left">
+                        <div style="width:55px">
+                            <img src="<?php echo e(asset('uploads/logo')); ?>/logoauto1.jpg" alt="..." style="width:55px; max-width:55px">
+                        </div>
+                    </div>
+                    <div class="media-body" style="">
+                        <h4 class="media-heading" style="color:#000;font-size:12px;"><?php echo e($comment->idUser->name); ?> - <span style="font-size:12px;color:#32e48c;"><?php echo e($comment->idEpisode->episode_name); ?></span></h4>
+                        <p style="color:#000"><?php echo e($comment->content); ?></p>
+                        <!-- con -->
+                        <?php if(count($comment->replies)): ?>
+                        <?php $__currentLoopData = $comment->replies; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $comment_cr): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="media col-md-12">
+                            <div class="media-left" style="">
+                                <div style="width:55px">
+                                    <img src="<?php echo e(asset('uploads/logo')); ?>/logoauto1.jpg" alt="..." style="width:55px; max-width:55px">
+                                </div>
+                            </div>
+                            <div class="media-body" style="">
+                                <h4 class="media-heading" style="color:#000;font-size:12px;"><?php echo e($comment_cr->idUser->name); ?> - <span style="font-size:12px;color:#32e48c;"><?php echo e($comment->idEpisode->episode_name); ?></span></h4>
+                                <p style="color:#000"><span style="color:#58e570"><?php echo e($comment_cr->reply_id_user->name); ?></span> - <?php echo e($comment_cr->content); ?></p>
+                            </div>
+                        </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <div class="alert alert-warning" style="margin-top:20px" role="alert">Hiện chưa có bình luận nào !</div>
+                <?php endif; ?>
+            </div>
+            <div class="clearfix"></div>
+            <div class="text-align" style="text-align:center">
+                <?php echo e($select_comment->appends(request()->all())->links()); ?>
+
+            </div>
+          </section> 
+          <div class="clearfix"></div>
           <section class="related-movies">
             <section id="halim-advanced-widget-3">
               <div class="section-heading">
-                <a href="https://animehot.xyz/moi-cap-nhat" title="Mới Cập Nhật">
+                <a title="Có Thể Bạn Thích">
                   <span class="h-text">Có Thể bạn thích</span>
                 </a>
               </div>
@@ -183,5 +262,8 @@
         <?php echo $__env->make('user.theloaimain', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
       </div>
     </div>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('js'); ?>
+
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.user', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\webphim\resources\views/user/chitiet.blade.php ENDPATH**/ ?>

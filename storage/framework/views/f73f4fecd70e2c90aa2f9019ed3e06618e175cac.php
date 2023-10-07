@@ -53,7 +53,7 @@ unset($__errorArgs, $__bag); ?>" name="password_confirmation" required autocompl
                             <div class="col-7">
                             </div>
                             <div class="col-5">
-                                <button type="submit" class="btn btn-primary btn-block">Đăng nhập ngay</button>
+                                <button type="submit" class="btn btn-primary btn-block">Đăng Ký ngay</button>
                             </div>
                         </div>
                     </form>
@@ -70,14 +70,14 @@ unset($__errorArgs, $__bag); ?>" name="password_confirmation" required autocompl
         </div>
         <div class="login__social alert">
             <div class="row d-flex justify-content-center">
-                <div class="col-lg-1 box-social text-center">
-                    <a href="" style="text-decoration:none">
+                <div class="col-lg-1 box-social text-center mt-1">
+                    <a href="<?php echo e(route('login-google')); ?>" style="text-decoration:none">
                         <i class="fa-brands fa-google" style="font-size:25px; color:#fff; padding:5px; background-color:#dd4b39;border-radius:5px;text-align:center"></i>
                         <span style="display:block;">google</span>
                     </a>
                 </div>
-                <div class="col-lg-1 box-social text-center">
-                    <a href="" style="text-decoration:none">
+                <div class="col-lg-1 box-social text-center mt-1">
+                    <a href="<?php echo e(route('login-facebook')); ?>" style="text-decoration:none">
                         <i class="fa-brands fa-facebook" style="font-size:25px; color:#fff; padding:5px; background-color:#3b5998;border-radius:5px"></i>
                         <span style="display:block;">facebook</span>
                     </a>

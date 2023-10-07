@@ -62,7 +62,14 @@
                                     <?php $__currentLoopData = $showcategory; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $showcate): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="col-md-2 col-sm-2 col-lg-3 col-xs-4">
                                       <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" name="timkiemtheloai[]" id="<?php echo e($showcate->name); ?><?php echo e($showcate->id); ?>" value="<?php echo e($showcate->id); ?>">
+                                        <input class="form-check-input" 
+                                        type="checkbox" 
+                                        name="timkiemtheloai[]" 
+                                        id="<?php echo e($showcate->name); ?><?php echo e($showcate->id); ?>"
+                                        value="<?php echo e($showcate->id); ?>"
+                                        <?php echo e((isset($_GET['timkiemtheloai']) && in_array($showcate->id, $_GET['timkiemtheloai'])) ? 'checked':''); ?>
+
+                                        >
                                         <label class="form-check-label" for="<?php echo e($showcate->name); ?><?php echo e($showcate->id); ?>"><?php echo e($showcate->name); ?></label>
                                       </div>
                                     </div>

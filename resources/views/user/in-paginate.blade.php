@@ -1,35 +1,3 @@
-<!-- <div class="text-center">
-    <ul class="page-numbers">
-        <li>
-            <a class="next page-numbers" href="https://animehot.xyz/moi-cap-nhat/page/2/">
-                <i class="hl-down-open rotate-left"></i>
-            </a>
-        </li>
-        <li>
-            <span aria-current="page" class="page-numbers current">1</span>
-        </li>
-        <li>
-            <a class="page-numbers" href="https://animehot.xyz/moi-cap-nhat/page/2/">2</a>
-        </li>
-        <li>
-            <a class="page-numbers" href="https://animehot.xyz/moi-cap-nhat/page/3/">3</a>
-        </li>
-        <li>
-            <span class="page-numbers dots">…</span>
-        </li>
-        <li>
-            <a class="page-numbers" href="https://animehot.xyz/moi-cap-nhat/page/83/">83</a>
-        </li>
-        <li>
-            <a class="next page-numbers" href="https://animehot.xyz/moi-cap-nhat/page/2/">
-                <i class="hl-down-open rotate-right"></i>
-            </a>
-        </li>
-    </ul>
-</div> -->
-
-
-
 @if ($paginator->hasPages())
     <div class="text-center">
         <ul class="page-numbers">

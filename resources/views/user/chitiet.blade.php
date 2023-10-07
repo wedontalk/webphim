@@ -24,6 +24,42 @@
 @section('css')
 <link rel='stylesheet' id='bootstrap-css'  href='{{asset("wp-content/themes/halimmovies/assets/css/bootstrap.min.css")}}' media='all' />
 <link rel='stylesheet' id='style-css'  href='{{asset("wp-content/themes/halimmovies/style1.css")}}' media='all' />
+
+<style>
+  .media{
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
+      align-items: flex-start;
+  }
+  .media .media-body{
+      /* border:1px solid; */
+      -webkit-box-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+  }
+  .media .media-left img{
+      padding-right: 10px;
+  }
+  .comment_form{
+      display:flex;
+      -webkit-box-pack:justify;
+      justify-content:space-between;
+  }
+  .comment_form button{
+      margin-top:3px;
+  }
+  #halim-list-server{
+    overflow: auto;
+    width: 100%;
+    max-height: 300px;
+  }
+  .luu span{
+    background-color:#737373 !important;
+  }
+</style>
 @endsection
 @section('main')
 <div class="container">
@@ -120,7 +156,7 @@
                   <ul class="halim-list-eps">
                     @foreach($showtapphim as $showtap)
                         <li class="halim-episode">
-                          <a href="{{route('xemphim', $showtap->slug_phim)}}"><span>{{$showtap->episode_name}}</span></a>
+                          <a href="{{route('xemphim', $showtap->slug_phim)}}" data-ep="{{$showtap->id}}" data-film="{{$showtap->film_id}}"><span>{{$showtap->episode_name}}</span></a>
                         </li>
                     @endforeach
                   </ul>
@@ -142,14 +178,56 @@
             </div>
         </section>
         @endforeach
-        @php
-          $current_url = Request::url();
-        @endphp
-        <div class="fb-comments" data-href="{{$current_url}}" data-width="100%" data-numposts="3"></div>
+        <!-- danh sách comment -->
+          <section class="related-movies">
+            <div class="section-heading">
+                <a title="Bình Luận - {{$thongt->name}}">
+                    <span class="h-text">Bình Luận</span>
+                </a>
+            </div>
+            <div id="comment_load" class="col-md-12" style="background:#fff;border-radius:5px;padding:10px">
+                @forelse($select_comment as $comment)
+                <div class="media col-md-12">
+                    <div class="media-left">
+                        <div style="width:55px">
+                            <img src="{{asset('uploads/logo')}}/logoauto1.jpg" alt="..." style="width:55px; max-width:55px">
+                        </div>
+                    </div>
+                    <div class="media-body" style="">
+                        <h4 class="media-heading" style="color:#000;font-size:12px;">{{$comment->idUser->name}} - <span style="font-size:12px;color:#32e48c;">{{$comment->idEpisode->episode_name}}</span></h4>
+                        <p style="color:#000">{{$comment->content}}</p>
+                        <!-- con -->
+                        @if(count($comment->replies))
+                        @foreach($comment->replies as $comment_cr)
+                        <div class="media col-md-12">
+                            <div class="media-left" style="">
+                                <div style="width:55px">
+                                    <img src="{{asset('uploads/logo')}}/logoauto1.jpg" alt="..." style="width:55px; max-width:55px">
+                                </div>
+                            </div>
+                            <div class="media-body" style="">
+                                <h4 class="media-heading" style="color:#000;font-size:12px;">{{$comment_cr->idUser->name}} - <span style="font-size:12px;color:#32e48c;">{{$comment->idEpisode->episode_name}}</span></h4>
+                                <p style="color:#000"><span style="color:#58e570">{{$comment_cr->reply_id_user->name}}</span> - {{$comment_cr->content}}</p>
+                            </div>
+                        </div>
+                        @endforeach
+                        @endif
+                    </div>
+                </div>
+                @empty
+                <div class="alert alert-warning" style="margin-top:20px" role="alert">Hiện chưa có bình luận nào !</div>
+                @endforelse
+            </div>
+            <div class="clearfix"></div>
+            <div class="text-align" style="text-align:center">
+                {{$select_comment->appends(request()->all())->links()}}
+            </div>
+          </section> 
+          <div class="clearfix"></div>
           <section class="related-movies">
             <section id="halim-advanced-widget-3">
               <div class="section-heading">
-                <a href="https://animehot.xyz/moi-cap-nhat" title="Mới Cập Nhật">
+                <a title="Có Thể Bạn Thích">
                   <span class="h-text">Có Thể bạn thích</span>
                 </a>
               </div>
@@ -181,4 +259,7 @@
         @include('user.theloaimain')
       </div>
     </div>
+@endsection
+@section('js')
+
 @endsection

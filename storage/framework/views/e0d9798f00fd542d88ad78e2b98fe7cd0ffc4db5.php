@@ -33,7 +33,7 @@
                 <div class="yoast_breadcrumb hidden-xs">
                   <span>
                     <span>
-                      <a href="../index.html">Home</a> » 
+                      <a href="<?php echo e(route('home.index')); ?>">Home</a> » 
                       <span class="breadcrumb_last" aria-current="page"><?php echo e($slugtheloai->name); ?></span>
                     </span>
                   </span>
@@ -71,7 +71,7 @@
                     <?php endif; ?>
                     <span class="is_trailer"><?php echo e($dt->updated_at->diffForHumans()); ?></span>
                     <?php if($dt->showphimfirst->max('episode')): ?>
-                      <span class="episode">Tập <?php echo e($dt->showphimfirst->max('episode')); ?></span>
+                      <span class="episode">Tập <?php echo e($dt->showphimfirst->max('episode_name')); ?></span>
                     <?php endif; ?>
                   <div class="icon_overlay"></div>
                   <div class="halim-post-title-box">

@@ -10,7 +10,7 @@ class account extends Model
     use HasFactory;
     protected $table = 'users';
     protected $fillable = [
-        'name','role'
+        'id','name','role','email','password'
     ];
 
 

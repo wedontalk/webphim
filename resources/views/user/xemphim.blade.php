@@ -27,6 +27,50 @@
         .activeline{
             background-color: #45ab88 ;
         }
+        emoji-picker {
+            width: 100%;
+            height: 300px;
+            margin-bottom:5px;
+        }
+        .media{
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: start;
+            -ms-flex-align: start;
+            align-items: flex-start;
+        }
+        .media .media-body{
+            /* border:1px solid; */
+            -webkit-box-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+        }
+        .media .media-left img{
+            padding-right: 10px;
+        }
+        .comment_form{
+            display:flex;
+            -webkit-box-pack:justify;
+            justify-content:space-between;
+        }
+        .comment_form button{
+            margin-top:3px;
+        }
+        #halim-list-server{
+            overflow: auto;
+            width:100%;
+            max-height:300px;
+        }
+        .luu span{
+            background-color:#737373 !important;
+        }
+        .label-text{
+            background:#030303;
+            color:#fff;
+            padding:5px 10px;
+            border-radius:5px;
+        }
     </style>
 @endsection
 @section('main')
@@ -60,29 +104,27 @@
                     <span>Thể loại:
                         @foreach($showphim as $show)
                             @foreach($show->nhieutheloai as $shownhieu)
-                                - <a href="{{route('theloai', $shownhieu->slug)}}" rel="category tag">{{$shownhieu->name}}</a>
+                                 <a class="label-text" href="{{route('theloai', $shownhieu->slug)}}" rel="category tag">{{$shownhieu->name}}</a>
                             @endforeach
                         @endforeach
                     </span>
-                    <hr>
+                    
                     <div class="clearfix"></div>
-                    <div class="col-12" style="display:block;text-align:center">
+                    <br>
+                    <div class="col-12" style="display:block;">
+                    List Server :
                     @foreach($showtapphimtheoserver as $show_server)
                             <a data-href="{{$show_server->content}}" data-svid="{{$show_server->id_server}}" class="btn btn-info btn-server">{{$show_server->funcserver->name_server}}</a>
                     @endforeach
                     </div>
-                    <hr>
+                    <br>
+                    <div class="clearfix"></div>
                     <div id="halim-player-wrapper" class="ajax-player-loading">
                         <!-- show phim -->
                         <iframe src="{{$showphimtap->content}}" frameborder="0" width="100%" height="100%" allowfullscreen></iframe>
                     </div>
                     <div class="clearfix"></div>
                     <div class="button-watch">
-                        <ul class="halim-social-plugin col-xs-4 hidden-xs">
-                        @php
-                            $current_url = Request::url();
-                        @endphp
-                            <div class="fb-like" data-href="{{$current_url}}" data-width="" data-layout="button" data-action="like" data-size="small" data-share="true"></div>                        </ul>
                         <ul class="col-xs-12 col-md-8">
                             <div id="explayer" class="hidden-xs">
                                 <i class="hl-resize-full"></i>
@@ -96,12 +138,12 @@
                                 <i class="hl-eye"></i>
                                 <span>
                                     @php
-                                    if ($showphimfirst->showphimfirst->sum('view_episode') > 999 && $showphimfirst->showphimfirst->sum('view_episode') <= 999999) {
-                                        $result = floor($showphimfirst->showphimfirst->sum('view_episode') / 1000) . 'K';
-                                    } elseif ($showphimfirst->showphimfirst->sum('view_episode') > 999999) {
-                                        $result = floor($showphimfirst->showphimfirst->sum('view_episode') / 1000000) . 'M';
+                                    if ($showphimtap->view_episode > 999 && $showphimtap->view_episode <= 999999) {
+                                        $result = floor($showphimtap->view_episode / 1000) . 'K';
+                                    } elseif ($showphimtap->view_episode > 999999) {
+                                        $result = floor($showphimtap->view_episode / 1000000) . 'M';
                                     } else {
-                                        $result = $showphimfirst->showphimfirst->sum('view_episode');
+                                        $result = $showphimtap->view_episode;
                                     }
                                     @endphp
                                     {{$result}}
@@ -119,7 +161,7 @@
                     <div class="title-block watch-page">
                         <div class="title-wrapper full">
                             <h1 class="entry-title">
-                                <a href="" title="Yuusha, Yamemasu" class="tl">{{$showphimfirst->name}}</a>
+                                <a href="{{route('chitiet', $showphimfirst->slug)}}" title="{{$showphimfirst->name}}" class="tl">{{$showphimfirst->name}}</a>
                             </h1>
                             <span class="plot-collapse" data-toggle="collapse" data-target="#expand-post-content" aria-expanded="false" aria-controls="expand-post-content" data-text="Nội dung phim"><i class="hl-angle-down"></i></span>
                         </div>
@@ -145,7 +187,7 @@
                                             $segment = $showtapsv->slug_phim;
                                         @endphp
                                             <li class="halim-episode">
-                                                <a id="hrefslug" href="{{route('xemphim',$showtapsv->slug_phim)}}" data-slug = "{{$showtapsv->slug_phim}}">
+                                                <a id="hrefslug" href="{{route('xemphim',$showtapsv->slug_phim)}}" data-film="{{$showtapsv->film_id}}" data-ep="{{$showtapsv->id}}" data-slug = "{{$showtapsv->slug_phim}}">
                                                     <span class="halim-btn halim-btn-2 halim-info-1-1 box-shadow {{Request::segment(2) == $segment ? 'active':''}}" data-title="{{$showtapsv->products->name}} {{$showtapsv->episode_name}}">{{$showtapsv->episode_name}}</span>
                                                 </a>
                                             </li>
@@ -158,37 +200,101 @@
                     <div id="lightout"></div>
                 </div>
             </section>
+            <div class="clearfix"></div>
             <section class="related-movies">
-                <section id="halim-advanced-widget-3">
-                    <div class="section-heading">
-                        <a href="/moi-cap-nhat" title="Mới Cập Nhật">
-                            <span class="h-text">Có Thể Bạn Thích</span>
-                        </a>
-                    </div>
-                    <div id="halim-advanced-widget-3-ajax-box" class="halim_box">
-                        @foreach($showphimlienquan as $showplq)
-                        <article class="col-md-3 col-sm-3 col-xs-6 thumb grid-item">
-                            <div class="halim-item">
-                                <a class="halim-thumb" href="{{route('chitiet', $showplq->slug)}}" title="{{$showplq->name}}">
-                                <figure>
-                                    <img class="lazy img-responsive" data-src="{{asset('uploads')}}/{{$showplq->image}}" alt="{{$showplq->name}}" title="{{$showplq->name}}">
-                                </figure>
-                                <span class="episode">{{$showplq->showphimfirst->max('episode')}}/{{$showplq->duration}}</span>
-                                <div class="icon_overlay"></div>
-                                <div class="halim-post-title-box">
-                                    <div class="halim-post-title ">
-                                    <h2 class="entry-title">{{$showplq->name}}</h2>
-                                    <p class="original_title">{{$showplq->name2}}</p>
+                <div class="section-heading">
+                    <a title="Bình Luận - {{$showphimfirst->name}}">
+                        <span class="h-text">Bình Luận - {{$showphimfirst->name}} </span>
+                    </a>
+                </div>
+                <!-- bảng comment -->
+                <div class="col-12">
+                    <form action="">
+                        <div class="form-group" style="position:relative">
+                            <textarea class="form-control" id="TextComment" rows="3" placeholder="nhập bình luận tại đây. Vui lòng không share link bậy bạ dẫn tới bị khóa tài khoản."></textarea>
+                            <div class="comment_form">
+                                <button type="button" id="comment_phim" class="btn btn-info">Bình Luận</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- danh sách comment -->
+                <div id="comment_load" class="col-md-12" style="background:#fff;border-radius:5px;padding:10px">
+                    @forelse($select_comment as $comment)
+                    <div class="media col-md-12" style="margin-top:10px">
+                        <div class="media-left" style="">
+                            <div style="width:55px">
+                                <img src="{{asset('uploads/logo')}}/logoauto1.jpg" alt="..." style="width:55px; max-width:55px">
+                                <a data-id="" style="cursor:pointer" data-toggle="collapse" href="#comment{{$comment->id}}" role="button" aria-expanded="false" aria-controls="collapseExample">Trả lời</a>
+                            </div>
+                        </div>
+                        <div class="media-body" style="">
+                            <h4 class="media-heading" style="color:#000;font-size:12px;">{{$comment->idUser->name}}
+                                @auth
+                                @if(isset(Auth::user()->id))
+                                    @if(Auth::user()->id == $comment->id_user)
+                                        <a style="font-size:12px;cursor:pointer">Xóa</a>
+                                    @endif
+                                @endif
+                                @endauth
+                            </h4>
+                            <p style="color:#000">{{$comment->content}}</p>
+                            <!-- con -->
+                            @if(count($comment->replies))
+                            @foreach($comment->replies as $comment_cr)
+                            <div class="media col-md-12" style="margin-top:10px">
+                                <div class="media-left" style="">
+                                    <div style="width:55px">
+                                        <img src="{{asset('uploads/logo')}}/logoauto1.jpg" alt="..." style="width:55px; max-width:55px;">
+                                        <a data-id="" style="cursor:pointer" data-toggle="collapse" href="#comment{{$comment_cr->id}}" role="button" aria-expanded="false" aria-controls="collapseExample">Trả lời</a>
                                     </div>
                                 </div>
-                                </a>
+                                <div class="media-body" style="">
+                                    <h4 class="media-heading" style="color:#000;font-size:12px">{{$comment_cr->idUser->name}}
+                                        @auth
+                                        @if(isset(Auth::user()->id))
+                                            @if(Auth::user()->id == $comment_cr->id_user)
+                                                <a style="font-size:12px;cursor:pointer">Xóa</a>
+                                            @endif
+                                        @endif
+                                        @endauth
+                                    </h4>
+                                    <p style="color:#000"><span style="color:#58e570">{{$comment_cr->reply_id_user->name}}</span> - {{$comment_cr->content}}</p>
+                                </div>
                             </div>
-                        </article>
-                        @endforeach
+                            <div class="col-md-12 collapse" id="comment{{$comment_cr->id}}">
+                                <div class="card card-body">
+                                    <div class="form-group" id="reply-form-{{$comment_cr->id}}">
+                                    <textarea class="form-control reply_content" rows="3" placeholder="nhập bình luận tại đây. Vui lòng không share link bậy bạ dẫn tới bị khóa tài khoản."></textarea>
+                                    <div class="comment_form">
+                                    <button type="button" id="reply_comment" data-reply-id="{{$comment_cr->id_user}}" data-reply="{{$comment_cr->id}}" data-pr="{{$comment->id}}" class="btn btn-info">Bình Luận</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                            @endif
+                        </div>
                     </div>
-                </section>
+                    <div class="col-md-12 collapse" id="comment{{$comment->id}}">
+                        <div class="card card-body">
+                            <div class="form-group" id="reply-form-{{$comment->id}}">
+                            <textarea class="form-control reply_content" rows="3" placeholder="nhập bình luận tại đây. Vui lòng không share link bậy bạ dẫn tới bị khóa tài khoản."></textarea>
+                            <div class="comment_form">
+                            <button type="button" id="reply_comment" data-reply-id="{{$comment->id_user}}" data-reply="{{$comment->id}}" data-pr="{{$comment->id}}" class="btn btn-info">Bình Luận</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="alert alert-warning" style="margin-top:20px" role="alert">Hiện chưa có bình luận nào !</div>
+                    @endforelse
+                </div>
                 <div class="clearfix"></div>
-            </section>
+                <div class="text-align" style="text-align:center">
+                    {{$select_comment->appends(request()->all())->links()}}
+                </div>
+            </section>        
         </main>
         @include('user.theloaimain')
     </div>
@@ -206,7 +312,7 @@
         <div class="modal-body">
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Nhập Nội dung</label>
-                <textarea class="form-control" id="idbaoloi" data-idphim="{{$showphimfirst->id}}" data-idtapphim="{{$showphimtap->episode}}" placeholder="Vui lòng nhập vấn đề của tập phim để được fix nhanh nhất..."></textarea>
+                <textarea class="form-control" id="idbaoloi" data-idphim="{{$showphimfirst->id}}" data-idtapphim="{{$showphimtap->episode}}" placeholder="Vui lòng nhập vấn đề của tập phim để được fix nhanh nhất..." cols="30" rows="5"></textarea>
             </div>
         </div>
         <div class="modal-footer">
@@ -221,41 +327,55 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"></script>
-<script>
-jQuery(document).ready(function($) {
-    function runwatchtv(){
-        $(".ajax-player-loading").append('<div id="halim-player-loader"></div>');
-        setTimeout(function(){
-            $(".ajax-player-loading").append('');
-            $("#halim-player-loader").hide();
-        },1000);
-    }
-    var dataSV = $('.btn-server').map(function() {
-        var showdata = $(this).data('href');
-        // show server
-        $(this).click(function(){
-            var playerHalim = $('#halim-player-wrapper').empty();
-            runwatchtv();
-            playerHalim.append('<iframe src="'+showdata+'" frameborder="0" width="100%" height="100%" allowfullscreen></iframe>')
-            $('.btn-server').removeClass('activeline');
-            $(this).addClass('activeline');
-        });
-        // load server
-        $('#halim-player-wrapper iframe').on('load', function() {
-            var iframeSrc = $(this).attr('src');
-            $('.btn-server').removeClass('activeline');
-            $('.btn-server[data-href="' + iframeSrc + '"]').addClass('activeline');
-        });
-        // click server
-        $('body').on('click', '#halim-player-wrapper iframe', function() {
-            var iframeSrc = $(this).attr('src');
-            $('.btn-server').removeClass('activeline');
-            $('.btn-server[data-href="' + iframeSrc + '"]').addClass('activeline');
-        });
-        
-    }).get();
 
-});
+<!-- javascript -->
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<!-- CSS -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+<!-- Default theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+<!-- Semantic UI theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css"/>
+<!-- Bootstrap theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css"/>
+
+
+
+<script>
+    jQuery(document).ready(function($) {
+        function runwatchtv(){
+            $(".ajax-player-loading").append('<div id="halim-player-loader"></div>');
+            setTimeout(function(){
+                $(".ajax-player-loading").append('');
+                $("#halim-player-loader").hide();
+            },1000);
+        }
+        var dataSV = $('.btn-server').map(function() {
+            var showdata = $(this).data('href');
+            // show server
+            $(this).click(function(){
+                var playerHalim = $('#halim-player-wrapper').empty();
+                runwatchtv();
+                playerHalim.append('<iframe src="'+showdata+'" frameborder="0" width="100%" height="100%" allowfullscreen></iframe>')
+                $('.btn-server').removeClass('activeline');
+                $(this).addClass('activeline');
+            });
+            // load server
+            $('#halim-player-wrapper iframe').on('load', function() {
+                var iframeSrc = $(this).attr('src');
+                $('.btn-server').removeClass('activeline');
+                $('.btn-server[data-href="' + iframeSrc + '"]').addClass('activeline');
+            });
+            // click server
+            $('body').on('click', '#halim-player-wrapper iframe', function() {
+                var iframeSrc = $(this).attr('src');
+                $('.btn-server').removeClass('activeline');
+                $('.btn-server[data-href="' + iframeSrc + '"]').addClass('activeline');
+            });
+            
+        }).get();
+
+    });
 </script>
 <script>
 jQuery(document).ready(function($) {
@@ -271,13 +391,60 @@ jQuery(document).ready(function($) {
                 },
                 success: function(data){
                     if(data){
-                        alert('báo cáo thành công !');
+                        alertify.alert('Thông Báo', 'Báo Cáo Thành Công', function(){ alertify.success('OK !'); });
                     }
+                    $('#idbaoloi').val('');
                 }
             })
     });
 
 });
-
+</script>
+<script>
+    jQuery(document).ready(function() {
+        $(document).on('click', '#comment_phim', function(){
+            var Textarea = $('#TextComment').val();
+            $.ajax({
+                url:'{{route("commentphim")}}',
+                method:'post',
+                data:{
+                    id_phim:'{{$showphimfirst->id}}',id_episode:'{{$showphimtap->id}}',textarea:Textarea,_token:'{{ csrf_token() }}',
+                },
+                success: function(data){
+                    if(data){
+                    $('#comment_load').html(data); 
+                    }else{
+                        alertify.alert('Thông Báo', 'Lỗi Rồi !', function(){ alertify.error('Đăng nhập chưa ?'); });
+                    }
+                    $('#TextComment').val('');
+                }
+            })
+        })
+        
+    })
+    $(document).on('click','#reply_comment', function(){
+        var commentId = $(this).data('reply');
+        var datapr = $(this).data('pr');
+        var reply = $('#reply-form-'+commentId+' .reply_content');
+        var content = reply.val();
+        var replyId = $(this).data('reply-id');
+        var url = "{{ route('comments.reply', ['comment' => ':commentId']) }}";
+        url = url.replace(':commentId', commentId);
+        // alert(url);
+        $.ajax({
+            url:url,
+            method:'post',
+            data:{
+                id_phim:'{{$showphimfirst->id}}',id_episode:'{{$showphimtap->id}}',parent:datapr,reply:replyId,content:content,_token:'{{ csrf_token() }}',
+            },
+            success: function(data){
+                if(data){
+                    $('#comment_load').html(data); 
+                }else{
+                    alertify.alert('Thông Báo', 'Lỗi Rồi !', function(){ alertify.error('Đăng nhập chưa ?'); });
+                }
+            }
+        })
+    })
 </script>
 @endsection

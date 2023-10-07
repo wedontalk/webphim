@@ -57,6 +57,7 @@ Route::group(['prefix' => 'admintrator','middleware'=>['checkAdmin','auth']], fu
     Route::put('post-seo-timanime', [App\Http\Controllers\metaallController::class, 'postseotimanime'])->name('postseotimanime');
     // quản lý quảng cáo
     Route::post('post-quangcao-danhmuc', [App\Http\Controllers\quangcaoController::class, 'postadsdanhmuc'])->name('postadsdanhmuc');
+    Route::put('update-quangcao/{id}', [App\Http\Controllers\quangcaoController::class, 'putquangcao'])->name('putquangcao');
     // post thông báo từ admin
     Route::put('post-thongbao-admin', [App\Http\Controllers\metaallController::class, 'postthongbao'])->name('postthongbao');
     // đổi trạng thái quảng cáo
@@ -82,6 +83,8 @@ Route::get('/loc-anime',[App\Http\Controllers\HomeController::class, 'locanime']
 // web user
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
 Route::get('/thong-tin-ca-nhan',[App\Http\Controllers\HomeController::class, 'thongtincanhan'])->name('thongtincanhan');
+Route::get('/doi-mat-khau',[App\Http\Controllers\HomeController::class, 'doimatkhau'])->name('doimatkhau');
+Route::put('/return-pass',[App\Http\Controllers\HomeController::class, 'returnpass'])->name('returnpass');
 Route::get('/anime-da-luu',[App\Http\Controllers\HomeController::class, 'animedaluu'])->name('animedaluu');
 Route::get('/ajax-anime-luu',[App\Http\Controllers\HomeController::class, 'ajaxanime'])->name('ajaxanime');
 Route::get('/the-loai/{slug}', [App\Http\Controllers\HomeController::class, 'theloai'])->name('theloai');
@@ -92,11 +95,16 @@ Route::get('/anime-xem-nhieu', [App\Http\Controllers\HomeController::class, 'xem
 Route::get('/tim-anime', [App\Http\Controllers\HomeController::class, 'filteranime'])->name('timanime');
 Route::get('/tim-kiem-anime', [App\Http\Controllers\HomeController::class, 'timkiemanime'])->name('timkiemanime');
 Route::get('/chi-tiet-anime/{slug}', [App\Http\Controllers\HomeController::class, 'chitiet'])->name('chitiet');
+Route::post('/comment-phim', [App\Http\Controllers\HomeController::class, 'commentphim'])->name('commentphim');
+Route::post('/comments/{comment}/replies', [App\Http\Controllers\HomeController::class, 'replycomment'])->name('comments.reply');
+Route::get('/binh-luan', [App\Http\Controllers\HomeController::class, 'binhluanshow'])->name('binhluanshow');
 Route::get('search',[
     'as'=>'search',
     'uses' => 'HomeController@search'
 ]);
 Route::get('/xem-phim/{slug}', [App\Http\Controllers\HomeController::class, 'xemphim'])->name('xemphim');
+Route::get('/loadcomment', [App\Http\Controllers\HomeController::class, 'autoloadComment'])->name('autoloadComment');
+Route::get('/loadcommentchitiet', [App\Http\Controllers\HomeController::class, 'loadCommentChiTiet'])->name('loadcommentchitiet');
 Route::post('/bao-loi-tap-phim', [App\Http\Controllers\HomeController::class, 'baoloitapphim'])->name('baoloitapphim');
 // login google
 Route::get('auth/google', [App\Http\Controllers\LoginGoogleController::class, 'redirectToGoogle'])->name('login-google');

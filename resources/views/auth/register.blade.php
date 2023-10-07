@@ -26,7 +26,7 @@
                             <div class="col-7">
                             </div>
                             <div class="col-5">
-                                <button type="submit" class="btn btn-primary btn-block">Đăng nhập ngay</button>
+                                <button type="submit" class="btn btn-primary btn-block">Đăng Ký ngay</button>
                             </div>
                         </div>
                     </form>

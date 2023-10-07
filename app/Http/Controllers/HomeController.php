@@ -16,8 +16,12 @@ use App\Models\traffic;
 use App\Models\server;
 use App\Models\thongbao;
 use App\Models\quangcao;
+use App\Models\account;
+use App\Models\comment;
+
 use Illuminate\Session\SessionManager;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
 use DB;
 
 use Auth;
@@ -45,6 +49,7 @@ class HomeController extends Controller
             $traffic->save();
         }
         // end check ip
+        return view('admin.dashboard', compact('traffic_count'));
     }
 
     /**
@@ -207,13 +212,15 @@ class HomeController extends Controller
         }else{
             $nextfilm = 'full';
         }
+        $select_comment = comment::orderBy('id','desc')->where('id_phim', $slugchitiet->id)->where('parent_id', 0)->paginate(10);
+
         foreach ($thongtin as $luu) {
             $meta_desc = $luu->meta_desc;
             $meta_keyword = $luu->meta_keyword;
             $meta_title = $luu->name;
             $meta_canontical = $request->url();
         }
-        return view('user.chitiet', compact('nextfilm','slugchitiet','tap_phim','thongtin','thongtinphim','showtapphim','showtapphimmax','showphimlienquan','meta_desc', 'meta_keyword', 'meta_title', 'meta_canontical'));
+        return view('user.chitiet', compact('nextfilm','slugchitiet','tap_phim','thongtin','thongtinphim','showtapphim','showtapphimmax','showphimlienquan','select_comment','meta_desc', 'meta_keyword', 'meta_title', 'meta_canontical'));
     }
     public function search(Request $request){
         $datameta = metaall::all();
@@ -249,6 +256,9 @@ class HomeController extends Controller
         if($slugxemphim){
             tapphim::find($slugxemphim->id)->increment('view_episode');
         }
+        $select_comment = comment::orderBy('id','desc')->where('id_episode', $slugxemphim->id)->where('parent_id', 0)->paginate(10);
+
+        // select comment phim
         // hiễn thị một số thẻ meta để seo web
         foreach ($showphim as $luu) {
             $meta_desc = $luu->meta_desc;
@@ -256,9 +266,24 @@ class HomeController extends Controller
             $meta_title = $luu->name;
             $meta_canontical = $request->url();
         }
-        return view('user.xemphim', compact('showphim','showphimtap','showphimfirst','showtapphim','showtapphimmax','showphimlienquan','showtapphimtheoserver','showlistunique','meta_desc', 'meta_keyword', 'meta_title', 'meta_canontical'));
+        return view('user.xemphim',
+        compact(
+        'showphim',
+        'showphimtap',
+        'showphimfirst',
+        'showtapphim',
+        'showtapphimmax',
+        'select_comment',
+        'showphimlienquan',
+        'showtapphimtheoserver',
+        'showlistunique',
+        'meta_desc',
+        'meta_keyword',
+        'meta_title',
+        'meta_canontical'
+        ));
     }
-
+    
     public function baoloitapphim(Request $request){
         $data = $request->all();
         $create = new baoloi();
@@ -287,4 +312,153 @@ class HomeController extends Controller
         return response()->json(['data' => $data]);
     }
 
+    public function doimatkhau(){
+        return view('user.doimatkhau');
+    }
+    public function returnpass(Request $request){
+        $id = Auth::user()->id;
+        $password_old = $request->password_old;
+        $password_new = $request->password_new;
+        if (Hash::check($password_old , Auth::user()->password)) { 
+            $update = account::find($id);
+            $update->password = Hash::make($password_new);
+            $update->save();
+            return redirect()->back()->with('success','Đổi Mật Khẩu Thành Công !');
+        }else{
+            return redirect()->back()->with('error','Đổi Mật Khẩu thất bại !');
+        }
+    }
+
+    public function commentphim(Request $request){
+        try {
+            $data = $request->all();
+            $user_id = Auth::user()->id;
+            $id_phim = $data['id_phim'];
+            $id_episode = $data['id_episode'];
+            $textcomment = $data['textarea'];
+            $create_comment = new comment();
+            $create_comment->id_phim = $id_phim;
+            $create_comment->id_episode = $id_episode;
+            $create_comment->content = $textcomment;
+            $create_comment->id_user = $user_id;
+            $create_comment->ngaycapnhat = Carbon::now('Asia/Ho_Chi_Minh');
+            if($create_comment->save()){
+                $loadcomment = $this->autoloadComment($request);
+            }
+            return $loadcomment;
+        } catch (\Throwable $th) {
+            
+        }
+    }
+
+    public function autoloadComment(Request $request){
+
+        $select_comment = comment::where('id_episode', $request->id_episode)->where('parent_id', 0)->orderBy('id','desc')->paginate(10);
+
+        $loadcomment = $this->loadCommentTree($select_comment);
+
+        return $loadcomment;
+    }
+    public function binhluanshow(Request $request){
+        $data = comment::orderBy('id','desc')->where('id_user', Auth::user()->id)->paginate(5);
+        return view('user.binhluan', compact('data'));
+    }
+
+    public function loadCommentChiTiet(Request $request){
+        
+        $select_comment = comment::where('id_phim', $request->id_phim)->orderBy('id','desc')->orderBy('id','desc')->paginate(10);
+
+        $loadcomment = $this->loadCommentTree($select_comment);
+
+        return $loadcomment;
+    }
+
+    private function loadCommentTree($select_comment){
+        $html = '';
+        foreach ($select_comment as $val) {
+            $html .='<div class="media col-md-12" style="margin-top:10px">';
+                $html .='<div class="media-left" style="">';
+                    $html .='<div style="width:55px">';
+                        $html .='<img src="'.asset('uploads/logo').'/logoauto1.jpg" alt="..." style="width:55px; max-width:55px">';
+                        $html .='<a data-id="'.$val->id.'" style="cursor:pointer" data-toggle="collapse" href="#comment'.$val->id.'" role="button" aria-expanded="false" aria-controls="collapseExample">Trả lời</a>';
+                    $html .='</div>';
+                $html .='</div>';
+            $html .='<div class="media-body" style="">';
+                $html .='<h4 class="media-heading" style="color:#000;font-size:12px">'.$val->idUser->name.' - ';
+                if(isset(Auth::user()->id)){
+                    if(Auth::user()->id == $val->id_user){
+                        $html .='<a style="font-size:12px;cursor:pointer">Xóa</a>';
+                    }
+                }
+                $html .='</h4>';
+                $html .='<p style="color:#000">'.$val->content.'</p>';
+                if (count($val->replies) > 0) {
+                foreach ($val->replies as $val_cr) {
+                $html .='<div class="media col-md-12" style="margin-top:10px;">';
+                $html .='<div class="media-left" style="">';
+                $html .='<div style="width:55px">';
+                $html .='<img src="'.asset('uploads/logo').'/logoauto1.jpg" alt="..." style="width:55px; max-width:55px">';
+                $html .='<a data-id="'.$val_cr->id.'" style="cursor:pointer" data-toggle="collapse" href="#comment'.$val_cr->id.'" role="button" aria-expanded="false" aria-controls="collapseExample">Trả lời</a>';
+                $html .='</div>';
+                $html .='</div>';
+                $html .='<div class="media-body">';
+                $html .='<h4 class="media-heading" style="color:#000;font-size:12px">'.$val_cr->idUser->name.' - ';
+                if(isset(Auth::user()->id)){
+                    if(Auth::user()->id == $val->id_user){
+                        $html .='<a style="font-size:12px;cursor:pointer">Xóa</a>';
+                    }
+                }
+                $html .='</h4>';
+                if($val_cr->reply_id != null){
+                    $html .='<p style="color:#000"><span style="color:#58e570">'.$val_cr->reply_id_user->name.'</span> - '.$val_cr->content.'</p>';
+                }
+                $html .='</div>';
+                $html .='</div>';
+                $html .='<div class="col-md-12 collapse" id="comment'.$val_cr->id.'">';
+                $html .='<div class="card card-body">';
+                $html .='<div class="form-group" id="reply-form-'.$val_cr->id.'">';
+                $html .='<textarea class="form-control reply_content" rows="3" placeholder="nhập bình luận tại đây. Vui lòng không share link bậy bạ dẫn tới bị khóa tài khoản."></textarea>';
+                $html .='<div class="comment_form">';
+                $html .='<button type="button" id="reply_comment" data-reply-id="'.$val_cr->id_user.'" data-reply="'.$val_cr->id.'" data-pr="'.$val->id.'" class="btn btn-info">Bình Luận</button>';
+                $html .='</div>';
+                $html .='</div>';
+                $html .='</div>';
+                $html .='</div>';
+               }
+            }
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .='<div class="col-md-12 collapse" id="comment'.$val->id.'">';
+            $html .='<div class="card card-body">';
+            $html .='<div class="form-group" id="reply-form-'.$val->id.'">';
+            $html .='<textarea class="form-control reply_content" rows="3" placeholder="nhập bình luận tại đây. Vui lòng không share link bậy bạ dẫn tới bị khóa tài khoản."></textarea>';
+            $html .='<div class="comment_form">';
+            $html .='<button type="button" id="reply_comment" data-reply-id="'.$val->id_user.'" data-reply="'.$val->id.'" data-pr="'.$val->id.'" class="btn btn-info">Bình Luận</button>';
+            $html .='</div>';
+            $html .='</div>';
+            $html .='</div>';
+            $html .='</div>';
+        }
+        return $html;
+    }
+
+    public function replycomment(Request $request){
+        try {
+            $data = $request->all();
+            $create_comment = new comment();
+            $create_comment->id_phim = $data['id_phim'];
+            $create_comment->id_episode = $data['id_episode'];
+            $create_comment->content = $data['content'];
+            $create_comment->id_user = Auth::user()->id;
+            $create_comment->parent_id = $data['parent'];
+            $create_comment->reply_id = $data['reply'];
+            $create_comment->ngaycapnhat = Carbon::now('Asia/Ho_Chi_Minh');
+            if($create_comment->save()){
+                $loadcomment = $this->autoloadComment($request);
+                return $loadcomment;
+            }
+        } catch (\Throwable $th) {
+            
+        }
+    }
 }

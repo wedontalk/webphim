@@ -22,13 +22,6 @@
   <title><?php echo e($meta_title); ?></title>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('main'); ?>
-<?php if(isset($qc_header)): ?>
-<div class="col-12" style="display:flex; justify-content:center">
-  <a href="">
-    <img src="<?php echo e(asset('uploads/quangcao')); ?>/<?php echo e($qc_header->images); ?>" alt="">
-  </a>
-</div>
-<?php endif; ?>
 <div class="container">
       <div class="row container" id="wrapper">
         <div class="halim-panel-filter">
@@ -103,39 +96,5 @@
         <?php echo $__env->make('user.theloaimain', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
       </div>
     </div>
-
-
-  <?php if(isset($qc_footer)): ?>
-    <!-- banner footer -->
-    <div class="col-12" style="display:flex; justify-content:center">
-      <a href="">
-        <img src="<?php echo e(asset('uploads/quangcao')); ?>/<?php echo e($qc_footer->images); ?>" alt="">
-      </a>
-    </div>
-    <!-- end banner footer -->
-  <?php endif; ?>
-  <?php if(isset($qc_modal)): ?>
-    <div class="modal fade" id="banner_qc" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <!-- <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5> -->
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <a href="<?php echo e($qc_modal->link); ?>">
-          <div class="modal-body">
-              <img src="<?php echo e(asset('uploads/quangcao')); ?>/<?php echo e($qc_modal->images); ?>" alt="" width="100%">
-          </div>
-          </a>
-          <!-- <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div> -->
-        </div>
-      </div>
-    </div>
-  <?php endif; ?>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.user', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\webphim\resources\views/user/search.blade.php ENDPATH**/ ?>

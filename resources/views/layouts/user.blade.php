@@ -10,10 +10,6 @@
   <link rel='stylesheet' id='bootstrap-css'  href="{{asset('wp-content/themes/halimmovies/assets/css/bootstrap.min5152.css?ver=1.0')}}" media='all' />
   <link rel='stylesheet' id='style-css'  href="{{asset('wp-content/themes/halimmovies/style5152.css?ver=1.0')}}" media='all' /> 
   <script type='text/javascript' src="{{asset('wp-content/themes/halimmovies/assets/js/jquery.min2050.js?ver=5.2.15')}}"></script>
-  <div id="fb-root"></div>
-  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v14.0&appId=3308862736097075&autoLogAppEvents=1" nonce="TCYniELl"></script>
-  <!-- <div id="fb-root"></div>
-  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v14.0&appId=3308862736097075&autoLogAppEvents=1" nonce="FQqG2kta"></script> -->
   @yield('css')
   <style>/*Style 3*/
     .halim-post-title {
@@ -46,7 +42,7 @@
             <form id="search-form-pc" name="halimForm" role="search" action="{{route('search')}}" method="GET">
               <div class="form-group">
                 <div class="input-group col-xs-12">
-                  <input id="search" type="text" name="search" class="form-control" placeholder="Search..." autocomplete="off" required>
+                  <input id="search" type="text" name="search" class="form-control" value="{{(isset($_GET['search']) && $_GET['search'] != '') ? $_GET['search']:''}}" placeholder="Search..." autocomplete="off" required>
                   <i class="animate-spin hl-spin4 hidden"></i>
                 </div>
               </div>
@@ -168,7 +164,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <!-- <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5> -->
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close_qc" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true" style="font-size: 30px;">&times;</span>
             </button>
           </div>
@@ -197,11 +193,9 @@
             <p style="text-align: left;"><?php foreach($showcauhinh as $key => $avatar) {
               echo $avatar->thongtin;
             } ?></p>
-            <!-- <p style="text-align: left;">Liên hệ: animehot.xyz@gmail.com</p> -->
           </p>
         </div>
         <div class="col-xs-12 col-sm-8 col-md-8">
-        <div class="fb-page" data-href="https://www.facebook.com/animetvh.net/" data-tabs="timeline" data-width="500" data-height="320" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/animetvh.net/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/animetvh.net/">animetvh.net</a></blockquote></div>        </div>
       </div>
     </footer>
     <div class="footer-credit">
@@ -213,9 +207,6 @@
           <div class="col-xs-12 col-sm-4 col-md-6 text-right pull-right">
             <p class="blog-info">animetvh.com</p>
           </div>
-          @if(isset($qc_onclick))
-            <input id="id_click" type="hidden" value="{{$qc_onclick->link}}">
-          @endif
         </div>
       </div>
     </div>
@@ -234,6 +225,7 @@
               $('.lazy').lazy();
           });
       </script>
+      <!-- callback -->
       <script>
         function delay(callback, ms) {
           var timer = 0;
@@ -270,12 +262,13 @@
           },500))
         });
       </script>
+      <!-- qc modal -->
       <script>
             $(document).ready(function(){
                 function displayModal() {
                   $('#banner_qc').modal('show');
                 }
-                var clickclose = $('.close');
+                var clickclose = $('.close_qc');
                 clickclose.on("click", function() {
                   closeModal();
                 });
@@ -343,19 +336,65 @@
         }
         });
       </script> -->
+      <!-- qc click -->
       <script>
             $(document).ready(function(){
               $(window).on('load', function (){
                 var clickItem = sessionStorage.getItem('clickItem');
-                var url = $('#id_click').val();
-                if(clickItem !== "true"){
-                  $(document).on('click','.halim-episode', function(){
-                   sessionStorage.setItem("clickItem", "true");
-                   window.open(url);
+                @if(isset($qc_onclick))
+                var url = {{$qc_onclick->link}};
+                @else
+                var url ='';
+                @endif
+                if(clickItem !== "true" && url !== undefined){
+                  $(document).on('click', function(){
+                    if(url !== ''){
+                      sessionStorage.setItem("clickItem", "true");
+                      window.open(url);
+                   }
                   })
                 }
               })
             });
+      </script>
+      <!-- lịch sử xem -->
+      <script>
+        $(document).ready(function(){
+          $(document).on('click','.halim-episode a', function(e){
+            var film = $(this).data('film');
+            var ep = $(this).data('ep');
+            var epUrl = $(this).attr('href');
+            var objList = {
+                id:film,
+                ep:ep,
+                epUrl:epUrl
+              }
+            var list = JSON.parse(localStorage.getItem('listMovie') || "[]");
+            var isExisting = false;
+              for (var i = 0; i < list.length; i++) {
+                  if (list[i].ep === ep) {
+                      isExisting = true;
+                      break;
+                  }
+              }
+              if (!isExisting) {
+                  list.push(objList);
+                  localStorage.setItem('listMovie', JSON.stringify(list));
+              }
+          })
+          $(document).ready(function(){
+              var list = JSON.parse(localStorage.getItem('listMovie') || "[]");
+              $('.halim-episode a').each(function(){
+                  var ep = $(this).data('ep');
+                  var isExisting = list.some(function(item){
+                      return item.ep == ep;
+                  });
+                  if (isExisting) {
+                      $(this).addClass('luu');
+                  }
+              });
+          });
+        });
       </script>
 </body>
 </html>

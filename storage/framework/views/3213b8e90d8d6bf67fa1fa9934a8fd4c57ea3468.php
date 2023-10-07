@@ -53,7 +53,6 @@
                                             </button>
                                         </div>
                                         <div class="card-content">
-                                            <img class="img-fluid w-100" src="<?php echo e(asset('uploads/quangcao')); ?>/<?php echo e($dt->images); ?>" alt="<?php echo e($dt->images); ?>" style="height:160px; width:100%;">
                                             <div class="card-body">
                                                 <?php if($dt->id_hienthi == 1): ?>
                                                 <h4 class="card-title">Loại : banner header</h4>
@@ -63,6 +62,8 @@
                                                 <h4 class="card-title">Loại : banner footer</h4>
                                                 <?php elseif($dt->id_hienthi == 4): ?>
                                                 <h4 class="card-title">Loại : Khung Thông báo (modal)</h4>
+                                                <?php else: ?>
+                                                <h4 class="card-title">Loại : onclick</h4>
                                                 <?php endif; ?>
                                             </div>
                                         </div>
@@ -74,9 +75,38 @@
                                                     <option value="2" <?php echo e(($dt->trang_thai == 2) ? 'selected':''); ?>>Đang tắt</option>
                                                 </select>
                                             </span>
-                                            <button class="btn btn-primary">Xem thêm</button>
+                                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalfull<?php echo e($dt->id); ?>">Xem thêm</button>
                                         </div>
                                     </div>
+                                </div>
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalfull<?php echo e($dt->id); ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa quảng cáo</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="<?php echo e(route('putquangcao',$dt->id)); ?>" method="POST" role="form" enctype="multipart/form-data">
+                                            <?php echo csrf_field(); ?> <?php echo method_field('PUT'); ?>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Link quảng cáo</label>
+                                                <input type="text" class="form-control" id="inputlink" name="link" value="<?php echo e($dt->link); ?>" aria-describedby="emailHelp" placeholder="Link quảng cáo">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputPassword1">Hình ảnh</label>
+                                                <input type="file" class="form-control" name="inputfile" placeholder="Hình ảnh">
+                                                <hr>
+                                                <img src="<?php echo e(asset('uploads/quangcao')); ?>/<?php echo e($dt->images); ?>" alt="" width="300px">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary" id="hoanthanh">Hoàn Thành</button>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>
                                 </div>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
@@ -216,6 +246,7 @@
         });
     });
 </script>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\webphim\resources\views/admin/caidat/showquangcao.blade.php ENDPATH**/ ?>

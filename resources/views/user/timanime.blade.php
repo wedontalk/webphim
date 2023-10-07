@@ -62,7 +62,13 @@
                                     @foreach($showcategory as $key => $showcate)
                                     <div class="col-md-2 col-sm-2 col-lg-3 col-xs-4">
                                       <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" name="timkiemtheloai[]" id="{{$showcate->name}}{{$showcate->id}}" value="{{$showcate->id}}">
+                                        <input class="form-check-input" 
+                                        type="checkbox" 
+                                        name="timkiemtheloai[]" 
+                                        id="{{$showcate->name}}{{$showcate->id}}"
+                                        value="{{$showcate->id}}"
+                                        {{(isset($_GET['timkiemtheloai']) && in_array($showcate->id, $_GET['timkiemtheloai'])) ? 'checked':''}}
+                                        >
                                         <label class="form-check-label" for="{{$showcate->name}}{{$showcate->id}}">{{$showcate->name}}</label>
                                       </div>
                                     </div>

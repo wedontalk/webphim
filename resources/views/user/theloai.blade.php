@@ -33,7 +33,7 @@
                 <div class="yoast_breadcrumb hidden-xs">
                   <span>
                     <span>
-                      <a href="../index.html">Home</a> » 
+                      <a href="{{route('home.index')}}">Home</a> » 
                       <span class="breadcrumb_last" aria-current="page">{{$slugtheloai->name}}</span>
                     </span>
                   </span>
@@ -71,7 +71,7 @@
                     @endif
                     <span class="is_trailer">{{$dt->updated_at->diffForHumans()}}</span>
                     @if($dt->showphimfirst->max('episode'))
-                      <span class="episode">Tập {{$dt->showphimfirst->max('episode')}}</span>
+                      <span class="episode">Tập {{$dt->showphimfirst->max('episode_name')}}</span>
                     @endif
                   <div class="icon_overlay"></div>
                   <div class="halim-post-title-box">

@@ -83,6 +83,27 @@ class quangcaoController extends Controller
         $file_name = $image->getClientOriginalExtension();
         return $file_name;
     }
+    public function putquangcao(Request $request, $id){
+        $data = $request->all();
+        $updated = quangcao::find($id);
+        $updated->link = $data['link'];
+        if($request->has('inputfile') == null)
+        {
+
+        }elseif($request->has('inputfile')){
+                $path = public_path('uploads/quangcao').'/'.$updated->images;
+                if(file_exists($path)){
+                    unlink($path);
+                }
+                $file= $data['inputfile'];
+                $ext = $file->extension();
+                $file_name = time().'-'.'quangcao.'.$ext;
+                $file->move(public_path('uploads/quangcao'), $file_name);
+                $updated->images = $file_name;
+        }
+        $updated->save();
+        return redirect()->route('caidat.showquangcao')->with('success', 'sửa thành công !!!');
+    }
 
     public function deletequangcao(Request $request){
         $data = $request->all();
@@ -151,7 +172,7 @@ class quangcaoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**

@@ -53,7 +53,6 @@
                                             </button>
                                         </div>
                                         <div class="card-content">
-                                            <img class="img-fluid w-100" src="{{asset('uploads/quangcao')}}/{{$dt->images}}" alt="{{$dt->images}}" style="height:160px; width:100%;">
                                             <div class="card-body">
                                                 @if($dt->id_hienthi == 1)
                                                 <h4 class="card-title">Loại : banner header</h4>
@@ -63,6 +62,8 @@
                                                 <h4 class="card-title">Loại : banner footer</h4>
                                                 @elseif($dt->id_hienthi == 4)
                                                 <h4 class="card-title">Loại : Khung Thông báo (modal)</h4>
+                                                @else
+                                                <h4 class="card-title">Loại : onclick</h4>
                                                 @endif
                                             </div>
                                         </div>
@@ -74,9 +75,38 @@
                                                     <option value="2" {{($dt->trang_thai == 2) ? 'selected':''}}>Đang tắt</option>
                                                 </select>
                                             </span>
-                                            <button class="btn btn-primary">Xem thêm</button>
+                                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalfull{{$dt->id}}">Xem thêm</button>
                                         </div>
                                     </div>
+                                </div>
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalfull{{$dt->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa quảng cáo</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{route('putquangcao',$dt->id)}}" method="POST" role="form" enctype="multipart/form-data">
+                                            @csrf @method('PUT')
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Link quảng cáo</label>
+                                                <input type="text" class="form-control" id="inputlink" name="link" value="{{$dt->link}}" aria-describedby="emailHelp" placeholder="Link quảng cáo">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputPassword1">Hình ảnh</label>
+                                                <input type="file" class="form-control" name="inputfile" placeholder="Hình ảnh">
+                                                <hr>
+                                                <img src="{{asset('uploads/quangcao')}}/{{$dt->images}}" alt="" width="300px">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary" id="hoanthanh">Hoàn Thành</button>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>
                                 </div>
                                 @endforeach
                             </div>
@@ -206,4 +236,5 @@
         });
     });
 </script>
+
 @stop()
